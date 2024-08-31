@@ -8,6 +8,7 @@ public class Product {
     private String prezzo;
     private String categoria;
     private String brand;
+    private String disponibilita;
     private boolean vetrina;
     private boolean deleted;
 
@@ -51,6 +52,13 @@ public class Product {
     }
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getDisponibilita() {
+        return disponibilita;
+    }
+    public void setDisponibilita(String disponibilita) {
+        this.disponibilita = disponibilita;
     }
 
     public boolean getVetrina() {

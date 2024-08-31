@@ -1,5 +1,4 @@
 package com.pisano.tennispadelstore.model.mo;
-
 public class User {
 
     private Long userid;
