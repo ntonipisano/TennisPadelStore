@@ -5,6 +5,9 @@ import com.isw.es_07_rubrica.model.dao.mySQLJDBCImpl.MySQLJDBCDAOFactory;
 import com.isw.es_07_rubrica.model.dao.CookieImpl.CookieDAOFactory;
  */
 
+import com.pisano.tennispadelstore.model.dao.CookieImpl.CookieDAOFactory;
+import com.pisano.tennispadelstore.model.dao.MySQLImpl.MySQLJDBCDAOFactory;
+
 import java.util.Map;
 
 public abstract class DAOFactory {
