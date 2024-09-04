@@ -17,6 +17,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         this.conn = conn;
     }
 
+    @Override
     public User create (
             Long userid,
             String username,
@@ -24,6 +25,15 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             String nome,
             String cognome,
             boolean admin) {
+
+        User user = new User();
+        user.setUserId(userid);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setNome(nome);
+        user.setCognome(cognome);
+        user.setAdmin(admin);
+        user.setDeleted(false);
 
         PreparedStatement ps;
 
@@ -37,12 +47,15 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps.setString(3, user.getNome());
             ps.setString(4, user.getCognome());
             ps.setBoolean(5, user.isAdmin());
-            ps.setBoolean(6, user.isDeleted());
-            ps.setLong(7, user.getUserId());
+            //deleted passato come parametro sopra
+
+            ps.executeUpdate();
+            //Per fare operazioni di insert si utilizza executeUpdate()
         }
         catch(SQLException e) {
 throw new RuntimeException(e);
         }
+        return user;
     }
 
 
