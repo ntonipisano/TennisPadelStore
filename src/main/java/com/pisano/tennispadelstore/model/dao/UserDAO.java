@@ -1,7 +1,9 @@
 package com.pisano.tennispadelstore.model.dao;
 
 import com.pisano.tennispadelstore.model.mo.User;
+import com.pisano.tennispadelstore.model.mo.Order;
 
+import java.util.List;
 public interface UserDAO {
 
     public User create(
@@ -24,5 +26,6 @@ public interface UserDAO {
 
     public void makeAdmin(Long userid);
     public void removeAdmin(Long userid);
+    public List<Order> getOrdersByUserId(Long userId);
 
 }

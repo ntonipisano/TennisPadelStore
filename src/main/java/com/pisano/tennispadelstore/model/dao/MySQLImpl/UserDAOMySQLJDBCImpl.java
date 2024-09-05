@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.pisano.tennispadelstore.model.dao.UserDAO;
 import com.pisano.tennispadelstore.model.mo.User;
+import com.pisano.tennispadelstore.model.mo.Order;
 
 public class UserDAOMySQLJDBCImpl implements UserDAO {
 
@@ -17,6 +18,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         this.conn = conn;
     }
 
+    /*Metodo per creare un nuovo utente nel db*/
     @Override
     public User create (
             Long userid,
@@ -58,6 +60,7 @@ throw new RuntimeException(e);
         return user;
     }
 
+    /*Metodo per aggiornare uno o più campi di un utente nel db*/
     @Override
     public void update(User user) {
         PreparedStatement ps;
@@ -82,6 +85,7 @@ throw new RuntimeException(e);
         }
     }
 
+    /*Metodo per eliminare un utente nel db*/
     @Override
     public void delete(User user) {
         PreparedStatement ps;
@@ -100,6 +104,7 @@ throw new RuntimeException(e);
         }
     }
 
+    /*Metodo per trovare i dati di un utente nel db a partire dallo userid*/
     public User findByUserId(Long userId) {
         String sql = "SELECT * FROM user WHERE userid = ? AND deleted = 'N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -131,6 +136,7 @@ throw new RuntimeException(e);
     Lo implementerò più in là quando mi servirà
     */
 
+    /*Metodo per trovare i dati di un utente nel db a partire dal suo username */
     public User findByUsername(String username) {
         String sql = "SELECT * FROM user WHERE username = ? AND deleted = 'N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -156,11 +162,13 @@ throw new RuntimeException(e);
         return null; // Restituisce null se non viene trovato nessun utente
     }
 
+    /*Metodo per dare i privilegi di admin a un utente (settando admin a S nel db)*/
     @Override
     public void makeAdmin(Long userId) {
         updateAdminStatus(userId, "S");
     }
 
+    /*Metodo per togliere i privilegi di admin a un utente (settando admin a N nel db)*/
     @Override
     public void removeAdmin(Long userId) {
         updateAdminStatus(userId, "N");
@@ -184,10 +192,33 @@ throw new RuntimeException(e);
         }
     }
 
+    /*Metodo per visualizzare gli ordini relativi a un utente*/
+    @Override
+    public List<Order> getOrdersByUserId(Long userId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM order WHERE userid = ? AND deleted = 'N'";
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, userId);
 
-
-
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Order order = new Order();
+                    order.setOrderId(rs.getLong("orderid"));
+                    order.setUserId(rs.getLong("userid"));
+                    order.setCosto(rs.getString("costo"));
+                    order.setStato(rs.getString("stato"));
+                    order.setIndirizzo(rs.getString("indirizzo"));
+                    order.setDataordine(rs.getString("dataordine"));
+                    order.setDeleted(rs.getBoolean("deleted"));
+                    orders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante il recupero degli ordini dell'utente", e);
+        }
+        return orders;
+    }
 
     User read(ResultSet rs) {
 
