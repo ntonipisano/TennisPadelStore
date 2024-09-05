@@ -20,5 +20,5 @@ public interface ProductDAO {
 
     public void delete(Product product);
 
-    public Product findByProductId(Product product);
+    public Product findByProductId(Long productid);
 }

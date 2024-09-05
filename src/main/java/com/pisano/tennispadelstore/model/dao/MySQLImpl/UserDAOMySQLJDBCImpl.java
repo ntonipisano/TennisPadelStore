@@ -244,11 +244,11 @@ throw new RuntimeException(e);
         } catch (SQLException sqle) {
         }
         try {
-            user.setAdmin(rs.getString("admin").equals("Y"));
+            user.setAdmin(rs.getString("admin").equals("S"));
         } catch (SQLException sqle) {
         }
         try {
-            user.setDeleted(rs.getString("deleted").equals("Y"));
+            user.setDeleted(rs.getString("deleted").equals("S"));
         } catch (SQLException sqle) {
         }
         System.out.println(user);
