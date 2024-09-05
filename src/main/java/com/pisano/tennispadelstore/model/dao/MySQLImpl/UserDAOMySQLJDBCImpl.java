@@ -58,6 +58,136 @@ throw new RuntimeException(e);
         return user;
     }
 
+    @Override
+    public void update(User user) {
+        PreparedStatement ps;
+
+        try {
+            String sql = "UPDATE user SET username = ?, password = ?, nome = ?, cognome = ?, admin = ?, deleted = 'N' WHERE userid = ?";
+
+            ps = conn.prepareStatement(sql);
+
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getNome());
+            ps.setString(4, user.getCognome());
+            ps.setBoolean(5, user.isAdmin());
+            ps.setLong(6, user.getUserId());
+            //Setto deleted a N per update
+
+            ps.executeUpdate();
+        }
+        catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(User user) {
+        PreparedStatement ps;
+
+        try {
+            String sql = "UPDATE user SET deleted = 'S' WHERE userid = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setLong(1, user.getUserId());
+
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public User findByUserId(Long userId) {
+        String sql = "SELECT * FROM user WHERE userid = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getLong("userid"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setNome(rs.getString("nome"));
+                    user.setCognome(rs.getString("cognome"));
+                    user.setAdmin(rs.getString("admin").equals("S"));
+                    user.setDeleted(rs.getString("deleted").equals("S"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null; // Restituisce null se non viene trovato nessun utente
+    }
+
+    /*
+    public User findLoggedUser() {
+        Long loggedInUserId = return findByUserId(loggedInUserId);
+    }
+    Qui loggedInUserId deve essere un token o una variabile di sessione
+    Lo implementerò più in là quando mi servirà
+    */
+
+    public User findByUsername(String username) {
+        String sql = "SELECT * FROM user WHERE username = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getLong("userid"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setNome(rs.getString("nome"));
+                    user.setCognome(rs.getString("cognome"));
+                    user.setAdmin(rs.getString("admin").equals("S"));
+                    user.setDeleted(rs.getString("deleted").equals("S"));
+                    return user;
+                }
+                rs.close();
+                ps.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null; // Restituisce null se non viene trovato nessun utente
+    }
+
+    @Override
+    public void makeAdmin(Long userId) {
+        updateAdminStatus(userId, "S");
+    }
+
+    @Override
+    public void removeAdmin(Long userId) {
+        updateAdminStatus(userId, "N");
+    }
+
+    //Implemento come metodo privato direttamente qui updateAdminStatus per motivi di sicurezza
+    //Essendo privato non potevo dichiararlo nell'interfaccia UserDAO senza implementarlo
+    private void updateAdminStatus(Long userId, String adminStatus) {
+        String sql = "UPDATE user SET admin = ? WHERE userid = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, adminStatus);
+            ps.setLong(2, userId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Nessun utente trovato con l'ID: " + userId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante la modifica dei privilegi dell'utente", e);
+        }
+    }
+
+
+
+
+
 
     User read(ResultSet rs) {
 

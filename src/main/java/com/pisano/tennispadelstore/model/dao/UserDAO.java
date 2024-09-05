@@ -16,10 +16,13 @@ public interface UserDAO {
 
     public void delete(User user);
 
-    public User findLoggedUser();
+    /* public User findLoggedUser(); */
 
     public User findByUserId(Long userId);
 
     public User findByUsername(String username);
+
+    public void makeAdmin(Long userid);
+    public void removeAdmin(Long userid);
 
 }
