@@ -1,5 +1,6 @@
 package com.pisano.tennispadelstore.model.mo;
 
+import java.sql.Blob;
 public class Product {
 
     private Long productid;
@@ -11,6 +12,7 @@ public class Product {
     private String disponibilita;
     private boolean vetrina;
     private boolean deleted;
+    private Blob image;
 
     public Long getProductid() {
         return productid;
@@ -74,4 +76,7 @@ public class Product {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public Blob getImage () { return image; }
+    public void setImage (Blob image) { this.image=image; }
 }

@@ -2,6 +2,8 @@ package com.pisano.tennispadelstore.model.dao;
 
 import com.pisano.tennispadelstore.model.mo.Product;
 
+import java.sql.Blob;
+
 public interface ProductDAO {
     public Product create(
             Long productid,
@@ -11,7 +13,8 @@ public interface ProductDAO {
             String categoria,
             String brand,
             String disponibilita,
-            boolean vetrina);
+            boolean vetrina,
+            Blob image);
 
     public void update(Product product);
 
