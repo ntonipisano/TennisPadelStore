@@ -106,11 +106,14 @@ throw new RuntimeException(e);
 
     /*Metodo per trovare i dati di un utente nel db a partire dallo userid*/
     public User findByUserId(Long userId) {
+        User user = null;
         String sql = "SELECT * FROM user WHERE userid = ? AND deleted = 'N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    user = read(rs);
+                    /*
                     User user = new User();
                     user.setUserId(rs.getLong("userid"));
                     user.setUsername(rs.getString("username"));
@@ -120,12 +123,13 @@ throw new RuntimeException(e);
                     user.setAdmin(rs.getString("admin").equals("S"));
                     user.setDeleted(rs.getString("deleted").equals("S"));
                     return user;
+                     */
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null; // Restituisce null se non viene trovato nessun utente
+        return user; // Restituisce null se non viene trovato nessun utente
     }
 
     /*
@@ -138,11 +142,14 @@ throw new RuntimeException(e);
 
     /*Metodo per trovare i dati di un utente nel db a partire dal suo username */
     public User findByUsername(String username) {
+        User user = null;
         String sql = "SELECT * FROM user WHERE username = ? AND deleted = 'N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    user = read(rs);
+                    /*
                     User user = new User();
                     user.setUserId(rs.getLong("userid"));
                     user.setUsername(rs.getString("username"));
@@ -152,14 +159,13 @@ throw new RuntimeException(e);
                     user.setAdmin(rs.getString("admin").equals("S"));
                     user.setDeleted(rs.getString("deleted").equals("S"));
                     return user;
+                    */
                 }
-                rs.close();
-                ps.close();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null; // Restituisce null se non viene trovato nessun utente
+        return user;
     }
 
     /*Metodo per dare i privilegi di admin a un utente (settando admin a S nel db)*/
@@ -251,8 +257,6 @@ throw new RuntimeException(e);
             user.setDeleted(rs.getString("deleted").equals("S"));
         } catch (SQLException sqle) {
         }
-        System.out.println(user);
         return user;
     }
-
 }

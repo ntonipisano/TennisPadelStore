@@ -115,16 +115,31 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     }
 
     /*Metodo per trovare le informazioni su un prodotto sul db a partire dal suo productid*/
+    @Override
+    public Product findByProductId(Long productId) {
+        Product product = null;
+        String sql = "SELECT * FROM product WHERE productid = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    product = read(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+    /*
+    @Override
     public Product findByProductId(Long productid) {
         PreparedStatement ps;
 
         try {
             String sql = "SELECT * FROM product WHERE productid = ? AND deleted = 'N'";
-
             ps = conn.prepareStatement(sql);
-
             ps.setLong(1,productid);
-
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Product product = new Product();
@@ -146,15 +161,58 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         return null;
         }
+        */
 
+    @Override
+    public List<Product> findbyCategory(String category) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE categoria = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, category);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 
+    @Override
+    public List<Product> findbyBrand(String brand) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE brand = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, brand);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 
-
-
-
-
-
-
+    @Override
+    public List<Product> findbyName(String name) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE nome LIKE ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 
     Product read(ResultSet rs) {
 
@@ -192,11 +250,11 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         } catch (SQLException sqle) {
         }
         try {
-            product.setImage(rs.getBlob("image"));
+            product.setDeleted(rs.getString("deleted").equals("S"));
         } catch (SQLException sqle) {
         }
         try {
-            product.setDeleted(rs.getString("deleted").equals("S"));
+            product.setImage(rs.getBlob("image"));
         } catch (SQLException sqle) {
         }
         return product;
