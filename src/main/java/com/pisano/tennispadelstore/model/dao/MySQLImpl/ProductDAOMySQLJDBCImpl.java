@@ -214,6 +214,22 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
+    /*Metodo che permette agli amministratori di settare la disponibilità di un prodotto*/
+    @Override
+    public void modDispbyProductid(Long productId, String nuovaDisponibilita) {
+        String query = "UPDATE product SET disponibilita = ? WHERE productid = ? AND deleted = 'N'";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, nuovaDisponibilita);
+            ps.setLong(2, productId);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Puoi aggiungere un'eccezione custom o un log per gestire l'errore in modo più specifico
+        }
+    }
+
+
     Product read(ResultSet rs) {
 
         Product product = new Product();

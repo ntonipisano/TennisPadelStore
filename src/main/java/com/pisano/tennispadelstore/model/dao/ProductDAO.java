@@ -25,5 +25,6 @@ public interface ProductDAO {
     public List <Product> findbyCategory (String categoria);
     public List <Product> findbyBrand (String brand);
     public List <Product> findbyName (String nome);
+    public void modDispbyProductid (Long productid, String disponibilita);
 
 }
