@@ -17,6 +17,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         this.conn = conn;
     }
 
+    /*Metodo per salvare un ordine sul db*/
     @Override
     public Order create(Long orderid, Long userid, String costo, String stato, String indirizzo, String dataordine) {
 
@@ -46,6 +47,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         return order;
     }
 
+    /*Metodo per modificare un ordine sul db*/
     @Override
     public void update(Order order) {
         try {
@@ -63,6 +65,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         }
     }
 
+    /*Metodo per eliminare un ordine dal db*/
     @Override
     public void delete(Order order) {
         try {
@@ -76,6 +79,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         }
     }
 
+    /*Metodo per cercare un ordine dal suo id*/
     @Override
     public Order findByOrderId(Order orderid) {
         Order order = null;
@@ -93,6 +97,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         return order;
     }
 
+    /*Metodo per vedere gli ordini di un utente*/
     @Override
     public List<Order> findByUserid(Long userid) {
         List<Order> orders = new ArrayList<>();
@@ -110,6 +115,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         return orders;
     }
 
+    /*Metodo per modificare lo stato dell'ordine*/
     @Override
     public void modStatobyOrderid(Long orderid, String stato) {
         try {

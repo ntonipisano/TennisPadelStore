@@ -163,6 +163,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         */
 
+    /*Metodo per filtrare i prodotti in base alla categoria */
     @Override
     public List<Product> findbyCategory(String category) {
         List<Product> products = new ArrayList<>();
@@ -180,6 +181,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
+    /*Metodo per filtrare i prodotti in base al brand */
     @Override
     public List<Product> findbyBrand(String brand) {
         List<Product> products = new ArrayList<>();
@@ -197,6 +199,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
+    /*Metodo per cercare i prodotti tramite il nome*/
     @Override
     public List<Product> findbyName(String name) {
         List<Product> products = new ArrayList<>();
@@ -228,7 +231,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             // Puoi aggiungere un'eccezione custom o un log per gestire l'errore in modo più specifico
         }
     }
-
 
     Product read(ResultSet rs) {
 

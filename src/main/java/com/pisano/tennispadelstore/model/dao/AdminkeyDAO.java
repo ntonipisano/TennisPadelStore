@@ -6,6 +6,5 @@ public interface AdminkeyDAO {
             String key);
 
     public void update (Adminkey adminkey);
-
-    public void delete (Adminkey adminkey);
+    public String Checkkey ();
 }
