@@ -1,4 +1,4 @@
-package com.pisano.tennispadelstore.model.dao.MySQLImpl;
+package com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl;
 
 import java.sql.DriverManager;
 import java.sql.Connection;

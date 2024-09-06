@@ -1,12 +1,7 @@
 package com.pisano.tennispadelstore.model.dao;
 
-/* MODIFICARE QUESTI CON LE IMPLEMENTAZIONI
-import com.isw.es_07_rubrica.model.dao.mySQLJDBCImpl.MySQLJDBCDAOFactory;
-import com.isw.es_07_rubrica.model.dao.CookieImpl.CookieDAOFactory;
- */
-
 import com.pisano.tennispadelstore.model.dao.CookieImpl.CookieDAOFactory;
-import com.pisano.tennispadelstore.model.dao.MySQLImpl.MySQLJDBCDAOFactory;
+import com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl.MySQLJDBCDAOFactory;
 
 import java.util.Map;
 
@@ -29,7 +24,7 @@ public abstract class DAOFactory {
 
     public abstract AdminkeyDAO getAdminkeyDAO();
 
-    public static DAOFactory getDAOFactory(String whichFactory,Map factoryParameters) {
+    public static DAOFactory getDAOFactory(String whichFactory, Map factoryParameters) {
 
         if (whichFactory.equals(MYSQLJDBCIMPL)) {
             return new MySQLJDBCDAOFactory(factoryParameters);
