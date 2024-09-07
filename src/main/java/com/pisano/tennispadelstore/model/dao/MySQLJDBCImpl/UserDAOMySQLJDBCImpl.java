@@ -226,6 +226,11 @@ throw new RuntimeException(e);
         return orders;
     }
 
+    @Override
+    public User findLoggedUser()  {
+        throw new UnsupportedOperationException("Not supported");
+    }
+
     User read(ResultSet rs) {
 
         User user = new User();

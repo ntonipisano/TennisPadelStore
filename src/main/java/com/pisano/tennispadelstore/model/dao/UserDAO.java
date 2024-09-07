@@ -17,8 +17,7 @@ public interface UserDAO {
     public void update(User user);
 
     public void delete(User user);
-
-    /* public User findLoggedUser(); */
+    public User findLoggedUser();
 
     public User findByUserId(Long userId);
 
