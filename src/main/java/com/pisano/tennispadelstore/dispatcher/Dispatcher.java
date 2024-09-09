@@ -33,7 +33,7 @@ public class Dispatcher extends HttpServlet {
             controllerMethod.invoke(null,request,response);
 
             String viewUrl=(String)request.getAttribute("viewUrl");
-            RequestDispatcher view=request.getRequestDispatcher("jsp/"+viewUrl/*+".jsp"*/);
+            RequestDispatcher view=request.getRequestDispatcher("jsp/"+viewUrl+".jsp");
             view.forward(request,response);
 
 

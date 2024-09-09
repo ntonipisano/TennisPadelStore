@@ -37,7 +37,7 @@ public class HomeManagement {
         Logger logger = LogService.getApplicationLogger();
 
         try {
-            Map<String, Object> sessionFactoryParameters = new HashMap<>();
+            Map sessionFactoryParameters = new HashMap<String, Object>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
@@ -50,7 +50,7 @@ public class HomeManagement {
 
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
-            request.setAttribute("viewUrl", "homeManagement/view.jsp");
+            request.setAttribute("viewUrl", "homeManagement/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -76,7 +76,7 @@ public class HomeManagement {
         Logger logger = LogService.getApplicationLogger();
 
         try {
-            Map<String, Object> sessionFactoryParameters = new HashMap<>();
+            Map sessionFactoryParameters = new HashMap<String, Object>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
@@ -98,9 +98,7 @@ public class HomeManagement {
                 applicationMessage = "Username o password errati!";
                 loggedUser = null;
             } else {
-                loggedUser = userDAO.create(user.getUserId(), user.getUsername(), user.getPassword(), user.getNome(), user.getCognome(), user.isAdmin());
-                HttpSession session = request.getSession();
-                session.setAttribute("loggedUser", loggedUser);
+                loggedUser = userDAO.create(user.getUserId(), null, null, user.getNome(), user.getCognome(), user.isAdmin());
             }
 
             daoFactory.commitTransaction();
@@ -109,7 +107,7 @@ public class HomeManagement {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", "homeManagement/view.jsp");
+            request.setAttribute("viewUrl", "homeManagement/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -201,20 +199,22 @@ public class HomeManagement {
         Logger logger = LogService.getApplicationLogger();
 
         try {
-            Map<String, Object> sessionFactoryParameters = new HashMap<>();
+            Map sessionFactoryParameters = new HashMap<String, Object>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
-            HttpSession session = request.getSession();
-            session.invalidate();
+            /*HttpSession session = request.getSession();
+            session.invalidate();*/
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+            sessionUserDAO.delete(null);
 
             sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn", false);
             request.setAttribute("loggedUser", null);
-            request.setAttribute("viewUrl", "homeManagement/view.jsp");
+            request.setAttribute("viewUrl", "homeManagement/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
