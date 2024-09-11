@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"');
+body {
+    background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Nanum Gothic', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    height: 55px;
+    width: 100%;
+    position: fixed; /* Fix navbar at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar-brand a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family:'Oswald', sans-serif;
+}
+
+.navbar-brand a:hover {
+    text-decoration: none;
+}
+
+.navbar-brand img.logo {
+    height: 50px; /* Regola l'altezza del logo */
+    width: auto;
+    margin-right: 8px; /* Spazio tra il logo e il testo */
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right .buttons {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 2rem;
+    border-radius: 4px;
+}
+
+.navbar-right .buttons img {
+    height: 24px; /* Uniforma l'altezza dell'icona del carrello */
+    width: auto;
+    margin-left: 0.5rem; /* Spazio tra il testo e l'icona */
+}
+
+.navbar-right .buttons:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+}
+
+.input-group {
+    width: calc(100% - 20px); /* Imposta la larghezza degli input */
+    padding: 10px;
+    margin: 10px 0; /* Margini per separare gli input */
+    border-radius: 4px; /* Angoli arrotondati per gli input */
+    box-sizing: border-box;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #66ff61;
+    color: white;
+    font-family: 'Nanum Gothic', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: rgba(97, 255, 105, 0.9);
+}
+
+p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+a {
+    color: #66ff61;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}

@@ -97,7 +97,7 @@ public class Login {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", "homeManagement/view");
+            request.setAttribute("viewUrl", "shop/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -131,8 +131,8 @@ public class Login {
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
-            String username = request.getParameter("adminUsername");
-            String password = request.getParameter("adminPassword");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
             String adminkey = request.getParameter("adminkey");
 
             // Usa AdminkeyDAO per verificare la chiave dell'amministratore
@@ -163,7 +163,7 @@ public class Login {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", "homeManagement/view");
+            request.setAttribute("viewUrl", "management/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);

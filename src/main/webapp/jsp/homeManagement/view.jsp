@@ -27,7 +27,6 @@
 <nav class="navbar">
     <div class="navbar-brand">
         <a href="Dispatcher?controllerAction=HomeManagement.view">
-            <!--<img src="${pageContext.request.contextPath}/images/logo.jpeg" alt="Tennis & Padel Store Logo" class="logo"> -->
             Tennis & Padel Store
         </a>
     </div>
@@ -39,11 +38,11 @@
     </div>
     <div class="navbar-right">
         <% if (!loggedOn) { %>
-        <a href="${pageContext.request.contextPath}/login" class="buttons">Login</a>
+        <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
         <% } else { %>
         <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
         <% } %>
-        <a href="${pageContext.request.contextPath}/cart" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
+        <a href=Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>
 </nav>
@@ -114,8 +113,6 @@
         <h5>&copy; 2024 Tennis & Padel Store. Tutti i diritti riservati.</h5>
     </div>
 </footer>
-
-
 
 </body>
 </html>
