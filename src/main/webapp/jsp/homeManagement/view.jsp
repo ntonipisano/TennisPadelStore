@@ -1,3 +1,4 @@
+<%-- HOME PAGE --%>
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
@@ -42,7 +43,7 @@
         <% } else { %>
         <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
         <% } %>
-        <a href=Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
+        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>
 </nav>
@@ -91,7 +92,7 @@
 <div class="shop-section">
     <h2>Scopri il Nostro Shop</h2>
     <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
-    <a href="${pageContext.request.contextPath}/shop" class="shop-button">Vai allo Shop</a>
+    <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Vai allo Shop</a>
 </div>
 
 <!-- Footer -->
