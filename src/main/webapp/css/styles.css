@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:wght@400;700&display=swap');
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background-image: url("../images/background.png");
+    height: 99vh; /* Altezza uguale all'altezza della viewport */
+    width: 100vw;
+    background-size: cover;
+    background-position: center;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    height: 55px;
+}
+
+.navbar-brand a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family:'Oswald', sans-serif;
+
+}
+
+.navbar-brand img.logo {
+    height: 50px; /* Regola l'altezza del logo */
+    width: auto;
+    margin-right: 8px; /* Spazio tra il logo e il testo */
+}
+
+.search-bar {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0rem;
+}
+
+.search-bar input[type="text"] {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-bar button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    background-color: #f05a28;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-bar button:hover {
+    background-color: #e04820;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right .buttons {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.navbar-right .buttons img {
+    height: 24px; /* Uniforma l'altezza dell'icona del carrello */
+    width: auto;
+    margin-left: 0.5rem; /* Spazio tra il testo e l'icona */
+}
+
+.navbar-right .buttons:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Messaggi */
+.alert {
+    background: #f44336;
+    color: #fff;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Contenitore Prodotti */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+}
+
+/* Vetrina Prodotti */
+.featured-products, .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Scheda Prodotto */
+.product-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    width: calc(33.333% - 1rem);
+    box-sizing: border-box;
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+.product-card h3 {
+    margin: 0.5rem 0;
+}
+
+.product-card p {
+    margin: 0.5rem 0;
+}
+
+.product-card .btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #f05a28;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+}
+
+.product-card .btn:hover {
+    background-color: #e04820;
+}
+
+/* Sezione Vai allo Shop */
+.shop-section {
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+    text-align: center;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.shop-section h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.shop-description {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.shop-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #66ff61;
+    color: white;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.shop-button:hover {
+    background-color: rgba(97, 255, 105, 0.9);
+}
+
+
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    font-family: 'Lora', serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px; /* Limita la larghezza del footer */
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-right a {
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.footer-right img {
+    width: 24px; /* Dimensione icone social */
+    vertical-align: middle;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    width: 100%;
+}

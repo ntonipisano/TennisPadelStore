@@ -1,190 +1,122 @@
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.Blob"%>
+<%@ page import="java.util.Base64" %>
+
+<%
+    boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
+    User loggedUser = (User) request.getAttribute("loggedUser");
+    String applicationMessage = (String) request.getAttribute("applicationMessage");
+    String menuActiveLink = "Home";
+
+%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Tennis & Padel Shop</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url(/images/background.png); /* Sostituisci con il percorso reale dell'immagine */
-            background-size: cover;
-            background-position: center;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-        }
-        main {
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px 0;
-        }
-        label, input {
-            margin: 5px;
-            font-size: 1em;
-        }
-        input[type="text"], input[type="password"] {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 250px;
-        }
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        section {
-            margin: 30px 0;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
-    <script>
-        function toggleAdminLogin() {
-            var adminSection = document.getElementById("adminSection");
-            var userSection = document.getElementById("userSection");
-            if (adminSection.classList.contains("hidden")) {
-                adminSection.classList.remove("hidden");
-                userSection.classList.add("hidden");
-            } else {
-                adminSection.classList.add("hidden");
-                userSection.classList.remove("hidden");
-            }
-        }
-
-        function validateForm() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            if (username == "" || password == "") {
-                alert("Entrambi i campi Username e Password devono essere riempiti.");
-                return false;
-            }
-            return true;
-        }
-
-        function validateAdminForm() {
-            var adminUsername = document.getElementById("adminUsername").value;
-            var adminPassword = document.getElementById("adminPassword").value;
-            var adminkey = document.getElementById("adminkey").value;
-            if (adminUsername == "" || adminPassword == "" || adminkey == "") {
-                alert("Tutti i campi sono obbligatori per l'accesso amministratore.");
-                return false;
-            }
-            return true;
-        }
-    </script>
+    <title>Tennis & Padel Store</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<header>
-    <h1>Benvenuto nel nostro negozio di Tennis e Padel</h1>
-    <button onclick="toggleAdminLogin()">Switch Login Utente/Amministratore</button>
-</header>
 
-<main>
-    <!-- Sezione Login Utente -->
-    <section id="userSection">
-        <h2>Login Utente</h2>
-        <form action="Dispatcher" method="post" onsubmit="return validateForm()">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <input type="submit" name="action" value="Login">
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-brand">
+        <a href="Dispatcher?controllerAction=HomeManagement.view">
+            <!--<img src="${pageContext.request.contextPath}/images/logo.jpeg" alt="Tennis & Padel Store Logo" class="logo"> -->
+            Tennis & Padel Store
+        </a>
+    </div>
+    <div class="search-bar">
+        <form action="searchProducts" method="get">
+            <input type="text" name="query" placeholder="Cerca prodotti...">
+            <button type="submit">Cerca</button>
         </form>
-    </section>
+    </div>
+    <div class="navbar-right">
+        <% if (!loggedOn) { %>
+        <a href="${pageContext.request.contextPath}/login" class="buttons">Login</a>
+        <% } else { %>
+        <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
+        <% } %>
+        <a href="${pageContext.request.contextPath}/cart" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
+        </a>
+    </div>
+</nav>
 
-    <!-- Sezione Login Amministratore -->
-    <section id="adminSection" class="hidden">
-        <h2>Login Amministratore</h2>
-        <form action="Dispatcher" method="post" onsubmit="return validateAdminForm()">
-            <label for="adminUsername">Username:</label>
-            <input type="text" id="adminUsername" name="adminUsername" required>
-            <label for="adminPassword">Password:</label>
-            <input type="password" id="adminPassword" name="adminPassword" required>
-            <label for="adminkey">Chiave segreta:</label>
-            <input type="password" id="adminkey" name="adminkey" required>
-            <input type="submit" name="action" value="AdminLogin">
-        </form>
-    </section>
 
-    <!-- Sezione Catalogo Prodotti -->
-    <section>
-        <h2>Prodotti in Catalogo</h2>
-        <ul>
-            <c:forEach var="product" items="${products}">
-                <li>
-                    <strong>${product.nome}</strong> - ${product.descrizione}<br>
-                    Prezzo: €${product.prezzo}<br>
-                    <img src="path/to/product/image/${product.productid}" alt="${product.nome}" style="width: 100px; height: auto;">
-                </li>
-            </c:forEach>
-        </ul>
-    </section>
+<!-- Messaggio Applicativo -->
+<% if (applicationMessage != null) { %>
+<div class="alert">
+    <%= applicationMessage %>
+</div>
+<% } %>
 
-    <!-- Sezione Prodotti in Vetrina -->
-    <section>
-        <h2>Prodotti in Vetrina</h2>
-        <ul>
-            <c:forEach var="product" items="${featuredProducts}">
-                <li>
-                    <strong>${product.nome}</strong> - ${product.descrizione}<br>
-                    Prezzo: €${product.prezzo}<br>
-                    <img src="path/to/product/image/${product.productid}" alt="${product.nome}" style="width: 100px; height: auto;">
-                </li>
-            </c:forEach>
-        </ul>
-    </section>
-</main>
+<!-- Vetrina Prodotti -->
+<div class="container">
+    <h2>Adesso in Promozione</h2>
+    <div class="featured-products">
+        <%
+            List<Product> featuredProducts = (List<Product>) request.getAttribute("featuredProducts");
+            for (Product product : featuredProducts) {
+            String base64Image = null;
+            if (product != null && product.getImage() != null) {
+            try {
+            Blob imageBlob = product.getImage();
+            byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
+            base64Image = Base64.getEncoder().encodeToString(imageData);
+            } catch (Exception e) {
+            e.printStackTrace();
+            }
+            }
+        %>
+        <div class="product-card">
+            <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
+            <h3><%= product.getNome() %></h3>
+            <p><%= product.getDescrizione() %></p>
+            <p>Prezzo: €<%= product.getPrezzo() %></p>
+            <a href="productDetails.jsp?productid=<%= product.getProductid() %>" class="btn">Dettagli</a>
+        </div>
+        <%
+            }
+        %>
+    </div>
+</div>
 
+<!-- Vai allo Shop -->
+<div class="shop-section">
+    <h2>Scopri il Nostro Shop</h2>
+    <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
+    <a href="${pageContext.request.contextPath}/shop" class="shop-button">Vai allo Shop</a>
+</div>
+
+
+
+<!-- Footer -->
 <footer>
-    <p>&copy; 2024 Tennis & Padel Shop. Tutti i diritti riservati.</p>
+    <div class="footer-content">
+        <div class="footer-left">
+            <h4>Contact</h4>
+            <p><strong>Address:</strong> Via Francia, Ferrara, FE</p>
+            <p><strong>Phone:</strong> +39 3389237840</p>
+        </div>
+        <div class="footer-right">
+            <h4>Follow us on</h4>
+            <a href="https://www.facebook.com/tennisepadelstore" target="_blank"><img src="${pageContext.request.contextPath}/images/facebook.png" alt="Facebook"></a>
+            <a href="https://x.com/tennisepadelstore" target="_blank"><img src="${pageContext.request.contextPath}/images/twitter.png" alt="Twitter"></a>
+            <a href="https://www.instagram.com/tennisepadelstore" target="_blank"><img src="${pageContext.request.contextPath}/images/instagram.png" alt="Instagram"></a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <h5>&copy; 2024 Tennis & Padel Store. Tutti i diritti riservati.</h5>
+    </div>
 </footer>
+
+
+
 </body>
 </html>

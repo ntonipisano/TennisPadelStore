@@ -232,6 +232,38 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
     }
 
+    @Override
+    public List <Product> findFeaturedProducts() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE vetrina = 'S'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    @Override
+    public List <Product> findAllProducts() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE deleted ='N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
     Product read(ResultSet rs) {
 
         Product product = new Product();

@@ -29,7 +29,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             boolean admin) {
 
         User user = new User();
-        user.setUserId(userid);
+        //user.setUserId(userid);
         user.setUsername(username);
         user.setPassword(password);
         user.setNome(nome);
@@ -53,6 +53,14 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
             ps.executeUpdate();
             //Per fare operazioni di insert si utilizza executeUpdate()
+            /*Recupero le chiavi generate dal db (userid che è autoincrement)*/
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setUserId(generatedKeys.getLong(1)); // Imposta l'ID generato nel tuo oggetto User
+                } else {
+                    throw new SQLException("Creazione utente fallita, nessun userid generato.");
+                }
+            }
         }
         catch(SQLException e) {
 throw new RuntimeException(e);
