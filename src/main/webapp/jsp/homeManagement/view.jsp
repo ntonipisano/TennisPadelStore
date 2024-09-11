@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+
 <!-- Navbar -->
 <nav class="navbar">
     <div class="navbar-brand">
@@ -74,11 +75,12 @@
             }
         %>
         <div class="product-card">
-            <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
-            <h3><%= product.getNome() %></h3>
-            <p><%= product.getDescrizione() %></p>
-            <p><%= product.getPrezzo() %></p>
-            <a href="productDetails.jsp?productid=<%= product.getProductid() %>" class="btn">Dettagli</a>
+            <a href="productDetails.jsp?productid=<%= product.getProductid() %>">
+                <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
+                <h3><%= product.getNome() %></h3>
+                <p><%= product.getDescrizione() %></p>
+                <p><%= product.getPrezzo() %></p>
+            </a>
         </div>
         <%
             }
@@ -92,8 +94,6 @@
     <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
     <a href="${pageContext.request.contextPath}/shop" class="shop-button">Vai allo Shop</a>
 </div>
-
-
 
 <!-- Footer -->
 <footer>
