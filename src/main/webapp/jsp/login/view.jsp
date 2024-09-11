@@ -41,7 +41,7 @@
 
 <div class="container">
     <h1>Login</h1>
-    <form id="loginForm" action="Dispatcher" method="post">
+    <form id="loginForm" name="loginForm" action="Dispatcher" method="post">
 
         <!-- Campo nascosto per tipo di login (utente o admin) -->
         <input type="hidden" id="loginType" name="loginType" value="user"/>
@@ -66,14 +66,30 @@
     </form>
     <button id="adminToggle">Admin Login</button>
     <p>Non hai un account? <a href="Dispatcher?controllerAction=Registrazione.view">Registrati!</a></p>
+
+    <% if (applicationMessage != null) { %>
+    <div style="color: #b20000;
+    background-color: #fdd;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;">
+        <%= applicationMessage %>
+    </div>
+    <% } %>
+
 </div>
 <script>
     document.getElementById('adminToggle').addEventListener('click', function() {
         var adminFields = document.getElementById('adminFields');
+        var loginType = document.getElementById('loginType');
+
         if (adminFields.style.display === 'none') {
             adminFields.style.display = 'block';
+            loginType.value = 'admin'; // Imposta il loginType come admin
         } else {
             adminFields.style.display = 'none';
+            loginType.value = 'user'; // Ritorna a user
         }
     });
 </script>

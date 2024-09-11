@@ -86,9 +86,10 @@ public class Login {
 
             if (user == null || !user.getPassword().equals(password)) {
                 applicationMessage = "Username o password errati!";
-                loggedUser = null;
             } else {
-                loggedUser = userDAO.create(user.getUserId(), null, null, user.getNome(), user.getCognome(), user.isAdmin());
+                HttpSession session = request.getSession();
+                session.setAttribute("loggedUser", user);
+                loggedUser = user;
             }
 
             daoFactory.commitTransaction();
@@ -97,7 +98,7 @@ public class Login {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", "shop/view");
+            request.setAttribute("viewUrl", loggedUser != null ? "shop/view" : "login/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -163,7 +164,7 @@ public class Login {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", "management/view");
+            request.setAttribute("viewUrl", loggedUser != null ? "management/view" : "login/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
