@@ -22,7 +22,6 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-
 <!-- Navbar -->
 <nav class="navbar">
     <div class="navbar-brand">
@@ -78,7 +77,7 @@
             <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
             <h3><%= product.getNome() %></h3>
             <p><%= product.getDescrizione() %></p>
-            <p>Prezzo: €<%= product.getPrezzo() %></p>
+            <p><%= product.getPrezzo() %></p>
             <a href="productDetails.jsp?productid=<%= product.getProductid() %>" class="btn">Dettagli</a>
         </div>
         <%
