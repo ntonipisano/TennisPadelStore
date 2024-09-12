@@ -11,27 +11,22 @@ import com.pisano.tennispadelstore.services.config.Configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-public class HomeManagement {
-
-    private HomeManagement() {
+public class ProductDetail {
+    private ProductDetail() {
     }
-
     public static void view(HttpServletRequest request, HttpServletResponse response) {
         DAOFactory sessionDAOFactory = null;
         DAOFactory productDAOFactory = null;
         User loggedUser;
+        Product product = null;
         Logger logger = LogService.getApplicationLogger();
 
         try {
-
-            /*Factory per User che usa i cookie*/
             Map sessionFactoryParameters = new HashMap<String, Object>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
@@ -41,25 +36,33 @@ public class HomeManagement {
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
             loggedUser = sessionUserDAO.findLoggedUser();
 
-            /*Factory per Product che va nel db */
             Map<String, Object> productFactoryParameters = new HashMap<>();
             productFactoryParameters.put("request", request);
             productFactoryParameters.put("response", response);
             productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
             productDAOFactory.beginTransaction();
 
+            // Recupera l'ID del prodotto dalla richiesta
+            String idprodotto = request.getParameter("productid");
+            Long productid = null;
+            if (idprodotto != null) {
+                productid = Long.parseLong(idprodotto);
+            }
+
+            // Recupera il prodotto corrispondente all'ID
             ProductDAO productDAO = productDAOFactory.getProductDAO();
-            List<Product> featuredProducts = productDAO.findFeaturedProducts();
+            product = productDAO.findByProductId(productid);
 
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
-            request.setAttribute("viewUrl", "homeManagement/view");
-            request.setAttribute("featuredProducts", featuredProducts);
+            //Passo l'oggetto prodotto recuperato dal db alla view tramite request
+            request.setAttribute("product", product);
+            request.setAttribute("viewUrl", "productDetail/view");
 
             sessionDAOFactory.commitTransaction();
             productDAOFactory.commitTransaction();
 
-        } catch (Exception e) {
+        }catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
@@ -68,7 +71,6 @@ public class HomeManagement {
                 logger.log(Level.SEVERE, "Rollback Error", t);
             }
             throw new RuntimeException(e);
-
         } finally {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();

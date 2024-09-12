@@ -1,29 +1,35 @@
-<%-- HOME PAGE --%>
+<%-- PAGINA SINGOLO PRODOTTO --%>
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
-<%@ page import="java.util.List" %>
 <%@ page import="java.sql.Blob"%>
 <%@ page import="java.util.Base64" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
+    Product product = (Product) request.getAttribute("product");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Home";
-
+    String base64Image = null;
+    if (product != null && product.getImage() != null) {
+        try {
+            Blob imageBlob = product.getImage();
+            byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
+            base64Image = Base64.getEncoder().encodeToString(imageData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 %>
 
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis & Padel Store</title>
+    <title>Dettagli Prodotto</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-
 <!-- Navbar -->
 <nav class="navbar">
     <div class="navbar-brand">
@@ -48,54 +54,34 @@
     </div>
 </nav>
 
-
-<!-- Messaggio Applicativo -->
-<% if (applicationMessage != null) { %>
-<div class="alert">
-    <%= applicationMessage %>
-</div>
-<% } %>
-
-<!-- Vetrina Prodotti -->
+<!-- Sezione per il prodotto -->
 <div class="container">
-    <h2>Adesso in Promozione</h2>
-    <div class="featured-products">
-        <%
-            List<Product> featuredProducts = (List<Product>) request.getAttribute("featuredProducts");
-            for (Product product : featuredProducts) {
-            String base64Image = null;
-            if (product != null && product.getImage() != null) {
-            try {
-            Blob imageBlob = product.getImage();
-            byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
-            base64Image = Base64.getEncoder().encodeToString(imageData);
-            } catch (Exception e) {
-            e.printStackTrace();
-            }
-            }
-        %>
-        <div class="product-card">
-            <a href="Dispatcher?controllerAction=ProductDetail.view&productid=<%= product.getProductid() %>">
-                <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
-                <h3><%= product.getNome() %></h3>
-                <p><%= product.getDescrizione() %></p>
-                <p><%= product.getPrezzo() %></p>
-            </a>
-        </div>
-        <%
-            }
-        %>
+
+    <!-- Link per tornare alla pagina precedente -->
+    <div class="back-link">
+        <a href="Dispatcher?controllerAction=Shop.view">Torna allo Shop</a>
     </div>
-</div>
 
-<!-- Vai allo Shop -->
-<div class="shop-section">
-    <h2>Scopri il Nostro Shop</h2>
-    <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
-    <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Vai allo Shop</a>
-</div>
+    <div class="product-detail">
+        <div class="product-image">
+            <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>" />
+        </div>
 
-<!-- Footer -->
+        <div class="product-info">
+            <h1> <strong> <%= product.getNome() %></strong></h1>
+            <p><strong>Brand </strong> <%= product.getBrand() %></p>
+            <p><strong>Categoria </strong> <%= product.getCategoria() %></p>
+            <p><strong>Descrizione </strong> <%= product.getDescrizione() %></p>
+            <div class="price"><strong>Prezzo </strong><%= product.getPrezzo() %></div>
+
+            <form action="cart?action=add&productid=<%= product.getProductid() %>" method="post">
+                <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
+            </form>
+        </div>
+        </div>
+    </div>
+
+
 <footer>
     <div class="footer-content">
         <div class="footer-left">
