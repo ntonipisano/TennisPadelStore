@@ -108,7 +108,7 @@ public class Login {
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", loggedUser != null ? "shop/view" : "login/view");
+            request.setAttribute("viewUrl", loggedUser != null ? "homeManagement/view" : "login/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -198,8 +198,6 @@ public class Login {
             }
         }
     }
-
-
 
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
         DAOFactory sessionDAOFactory = null;

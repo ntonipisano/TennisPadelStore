@@ -48,7 +48,6 @@
         <!-- Campo nascosto per il Dispatcher -->
         <input type="hidden" name="controllerAction" value="Login.handleLogin"/>
 
-
         <div class="input-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
