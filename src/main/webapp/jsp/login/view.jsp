@@ -2,7 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
-<%@ page import="java.util.List" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -46,7 +45,7 @@
 
         <!-- Campo nascosto per tipo di login (utente o admin) -->
         <input type="hidden" id="loginType" name="loginType" value="user"/>
-        <!-- Campo nascosto per il controller -->
+        <!-- Campo nascosto per il Dispatcher -->
         <input type="hidden" name="controllerAction" value="Login.handleLogin"/>
 
 
