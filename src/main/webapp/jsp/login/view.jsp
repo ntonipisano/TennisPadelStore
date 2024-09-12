@@ -47,7 +47,8 @@
         <!-- Campo nascosto per tipo di login (utente o admin) -->
         <input type="hidden" id="loginType" name="loginType" value="user"/>
         <!-- Campo nascosto per il controller -->
-        <input type="hidden" name="controllerAction" value="Login.login"/>
+        <input type="hidden" name="controllerAction" value="Login.handleLogin"/>
+
 
         <div class="input-group">
             <label for="username">Username</label>
@@ -60,7 +61,7 @@
         <div id="adminFields" style="display: none;">
             <div class="input-group">
                 <label for="adminkey">Chiave segreta admin</label>
-                <input type="text" id="adminkey" name="adminkey">
+                <input type="password" id="adminkey" name="adminkey">
             </div>
         </div>
         <button type="submit">Login</button>

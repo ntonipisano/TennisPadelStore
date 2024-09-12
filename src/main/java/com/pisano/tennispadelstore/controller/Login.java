@@ -58,6 +58,16 @@ public class Login {
         }
     }
 
+    public static void handleLogin(HttpServletRequest request, HttpServletResponse response) {
+        String loginType = request.getParameter("loginType");
+
+        if ("admin".equals(loginType)) {
+            adminLogin(request, response);
+        } else {
+            login(request, response);
+        }
+    }
+
     public static void login(HttpServletRequest request, HttpServletResponse response) {
         DAOFactory sessionDAOFactory = null;
         DAOFactory daoFactory = null;
@@ -126,30 +136,35 @@ public class Login {
         Logger logger = LogService.getApplicationLogger();
 
         try {
-            Map sessionFactoryParameters = new HashMap<String, Object>();
+            // Creazione della factory per la sessione
+            Map<String, Object> sessionFactoryParameters = new HashMap<>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
+            // Creazione della factory per il DAO
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+            daoFactory.beginTransaction();
+
+            // Recupero dei parametri dalla richiesta
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String adminkey = request.getParameter("adminkey");
 
-            // Usa AdminkeyDAO per verificare la chiave dell'amministratore
-            AdminkeyDAO adminkeyDAO = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null).getAdminkeyDAO();
-            boolean isValidKey = adminkeyDAO.Checkkey().equals(adminkey);
+            // Verifica della chiave amministrativa
+            AdminkeyDAO adminkeyDAO = daoFactory.getAdminkeyDAO();
+            boolean isValidKey = adminkeyDAO.Checkkey() != null && adminkeyDAO.Checkkey().equals(adminkey);
 
             if (isValidKey) {
-                daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
-                daoFactory.beginTransaction();
-
+                // Verifica delle credenziali dell'amministratore
                 UserDAO userDAO = daoFactory.getUserDAO();
                 User admin = userDAO.findByUsername(username);
 
                 if (admin != null && admin.getPassword().equals(password) && admin.isAdmin()) {
                     HttpSession session = request.getSession();
                     session.setAttribute("loggedUser", admin);
+                    loggedUser = admin;
                 } else {
                     applicationMessage = "Username, password o chiave amministratore non validi.";
                 }
@@ -183,6 +198,7 @@ public class Login {
             }
         }
     }
+
 
 
     public static void logout(HttpServletRequest request, HttpServletResponse response) {

@@ -9,9 +9,7 @@ import com.pisano.tennispadelstore.model.dao.AdminkeyDAO;
 import com.pisano.tennispadelstore.model.mo.Adminkey;
 public class AdminkeyDAOMySQLJDBCImpl implements AdminkeyDAO {
     Connection conn;
-    public AdminkeyDAOMySQLJDBCImpl(Connection conn) {
-        this.conn = conn;
-    }
+    public AdminkeyDAOMySQLJDBCImpl(Connection conn) { this.conn = conn; }
 
     @Override
     public Adminkey create (String key) {
@@ -48,8 +46,10 @@ public class AdminkeyDAOMySQLJDBCImpl implements AdminkeyDAO {
 
     @Override
     public String Checkkey() {
-        String sql = "SELECT `key` FROM adminkey LIMIT 1"; // Una sola riga con la chiave
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        PreparedStatement ps;
+        try {
+        String sql = "SELECT `key` FROM adminkey LIMIT 1";
+        ps = conn.prepareStatement(sql);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("key");
