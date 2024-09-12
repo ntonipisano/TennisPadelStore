@@ -115,7 +115,7 @@ public class Registrazione {
             sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",loggedUser!=null);
-            applicationMessage = "Registrazione avvenuta con successo. Effettua il login.";
+            applicationMessage = "Registrazione avvenuta con successo! Effettua il login";
             request.setAttribute("applicationMessage", applicationMessage);
             request.setAttribute("viewUrl", "login/view");
 

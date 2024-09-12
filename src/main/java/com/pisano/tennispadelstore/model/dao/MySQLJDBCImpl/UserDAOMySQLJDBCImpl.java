@@ -2,6 +2,7 @@ package com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,7 +30,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             boolean admin) {
 
         User user = new User();
-        //user.setUserId(userid);
         user.setUsername(username);
         user.setPassword(password);
         user.setNome(nome);
@@ -37,34 +37,44 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         user.setAdmin(admin);
         user.setDeleted(false);
 
-        PreparedStatement ps;
+        PreparedStatement ps = null;
+        ResultSet generatedKeys = null;
 
         try {
             String sql = "INSERT INTO user (username, password, nome, cognome, admin, deleted) VALUES (?, ?, ?, ?, ?, 'N')";
 
-            ps = conn.prepareStatement(sql);
+            // Specifica che vuoi ottenere le chiavi generate
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getNome());
             ps.setString(4, user.getCognome());
-            ps.setBoolean(5, user.isAdmin());
-            //deleted passato come parametro sopra
+            ps.setString(5, admin ? "S" : "N");
 
+            // Esegui l'inserimento
             ps.executeUpdate();
-            //Per fare operazioni di insert si utilizza executeUpdate()
-            /*Recupero le chiavi generate dal db (userid che è autoincrement)*/
-            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    user.setUserId(generatedKeys.getLong(1)); // Imposta l'ID generato nel tuo oggetto User
-                } else {
-                    throw new SQLException("Creazione utente fallita, nessun userid generato.");
-                }
+
+            // Recupera le chiavi userid generate
+            generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                user.setUserId(generatedKeys.getLong(1)); // Imposta l'ID generato nel tuo oggetto User
+            } else {
+                throw new SQLException("Creazione utente fallita, nessun userid generato.");
             }
         }
         catch(SQLException e) {
-throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
+        finally {
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                throw new RuntimeException("Errore durante la chiusura delle risorse", e);
+            }
+        }
+
         return user;
     }
 

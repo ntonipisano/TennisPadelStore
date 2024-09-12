@@ -67,15 +67,6 @@ public class User {
         this.orders = orders;
     }
 
-    /*
-    public Contact getContacts(int index) {
-        return this.contacts[index];
-    }
-
-    public void setContacts(int index, Contact contacts) {
-        this.contacts[index] = contacts;
-    }
-    */
 }
 
 
