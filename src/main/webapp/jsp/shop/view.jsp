@@ -23,6 +23,45 @@
 </head>
 <body>
 
+<%-- Script js che ricarica una volta la pagina shop per ricevere il cookie user --%>
+<script type="text/javascript">
+    function getCookie(name) {
+        let cookieArr = document.cookie.split(";");
+        for (let i = 0; i < cookieArr.length; i++) {
+            let cookiePair = cookieArr[i].split("=");
+            if (name == cookiePair[0].trim()) {
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+        return null;
+    }
+
+    // Funzione per ricaricare la pagina se necessario
+    function handlePageReload() {
+        // Se la pagina non è mai stata ricaricata, ricarica la prima volta
+        if (!localStorage.getItem("firstLoad")) {
+            localStorage.setItem("firstLoad", "true");
+            window.location.reload();
+        }
+
+        // Controlla se l'utente è loggato (cookie 'loggedUser' presente)
+        if (getCookie("loggedUser")) {
+            // Se la pagina non è stata ricaricata dopo il login, ricarica
+            if (!localStorage.getItem("loginReloaded")) {
+                localStorage.setItem("loginReloaded", "true");
+                window.location.reload();
+            }
+        } else {
+            // Se l'utente non è loggato (logout), resetta il flag
+            localStorage.removeItem("loginReloaded");
+        }
+    }
+
+    // Esegui la funzione di gestione del ricaricamento della pagina
+    handlePageReload();
+</script>
+
+
 <nav class="navbar">
     <div class="navbar-brand">
         <a href="Dispatcher?controllerAction=HomeManagement.view">
@@ -39,9 +78,11 @@
         <% if (!loggedOn) { %>
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
         <% } else { %>
-        <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
+        <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
+        <a href="Dispatcher?controllerAction=Login.logout" class="buttons">Logout</a>
         <% } %>
-        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
+        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img
+                src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>
 </nav>

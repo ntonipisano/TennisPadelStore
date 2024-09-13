@@ -57,11 +57,13 @@ body {
 .navbar-right .buttons {
     color: #fff;
     background-color: transparent;
+    cursor: pointer;
     text-decoration: none;
     margin-left: 1rem;
     margin-right: 0.5rem;
     padding: 0.5rem 2rem;
     border-radius: 4px;
+    font-family: "Nanum Gothic",sans-serif;
 }
 
 .navbar-right .buttons img {
@@ -137,4 +139,3 @@ a {
 a:hover {
     text-decoration: none;
 }
-

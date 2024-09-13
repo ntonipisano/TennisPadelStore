@@ -47,7 +47,8 @@
         <% if (!loggedOn) { %>
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
         <% } else { %>
-        <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
+        <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
+        <button class="buttons">Logout</button>
         <% } %>
         <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
         </a>

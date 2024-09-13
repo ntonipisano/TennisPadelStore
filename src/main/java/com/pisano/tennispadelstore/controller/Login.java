@@ -95,20 +95,41 @@ public class Login {
             User user = userDAO.findByUsername(username);
 
             if (user == null || !user.getPassword().equals(password)) {
+                sessionUserDAO.delete(null);
                 applicationMessage = "Username o password errati!";
+                loggedUser=null;
             } else {
-                HttpSession session = request.getSession();
+                /*HttpSession session = request.getSession();
                 session.setAttribute("loggedUser", user);
-                loggedUser = user;
+                loggedUser = user;*/
+                //CREO IL COOKIE
+                loggedUser = sessionUserDAO.create(user.getUserId(), null,null, user.getNome(),null,user.isAdmin());
             }
 
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
 
+            /*
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
             request.setAttribute("viewUrl", loggedUser != null ? "homeManagement/view" : "login/view");
+            */
+
+            if (loggedUser != null) {
+                request.setAttribute("loggedOn", loggedUser != null);
+                request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("applicationMessage", applicationMessage);
+                // Chiama il metodo view del controller HomeManagement
+                Shop.view(request, response);
+                //request.setAttribute("viewUrl","homeManagement/view");
+            } else {
+                request.setAttribute("loggedOn", loggedUser != null);
+                request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("applicationMessage", applicationMessage);
+                // Reindirizza alla pagina di login se le credenziali non sono corrette
+                request.setAttribute("viewUrl","login/view");
+            }
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -136,18 +157,19 @@ public class Login {
         Logger logger = LogService.getApplicationLogger();
 
         try {
-            // Creazione della factory per la sessione
-            Map<String, Object> sessionFactoryParameters = new HashMap<>();
+
+            Map sessionFactoryParameters = new HashMap<String,Object>();
             sessionFactoryParameters.put("request", request);
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
-            // Creazione della factory per il DAO
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+            loggedUser = sessionUserDAO.findLoggedUser();
+
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
             daoFactory.beginTransaction();
 
-            // Recupero dei parametri dalla richiesta
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String adminkey = request.getParameter("adminkey");
@@ -162,13 +184,16 @@ public class Login {
                 User admin = userDAO.findByUsername(username);
 
                 if (admin != null && admin.getPassword().equals(password) && admin.isAdmin()) {
-                    HttpSession session = request.getSession();
+                    /*HttpSession session = request.getSession();
                     session.setAttribute("loggedUser", admin);
-                    loggedUser = admin;
+                    loggedUser = admin;*/
+                    //CREO IL COOKIE
+                    loggedUser = sessionUserDAO.create(admin.getUserId(),null,null,admin.getNome(),null,admin.isAdmin());
                 } else {
+                    sessionUserDAO.delete(null);
                     applicationMessage = "Username, password o chiave amministratore non validi.";
+                    loggedUser=null;
                 }
-
                 daoFactory.commitTransaction();
             } else {
                 applicationMessage = "Chiave amministratore non valida.";
@@ -220,6 +245,7 @@ public class Login {
             request.setAttribute("loggedOn", false);
             request.setAttribute("loggedUser", null);
             request.setAttribute("viewUrl", "homeManagement/view");
+            //HomeManagement.view(request,response);
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);

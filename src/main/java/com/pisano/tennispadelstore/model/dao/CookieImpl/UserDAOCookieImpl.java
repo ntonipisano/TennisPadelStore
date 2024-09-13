@@ -30,7 +30,7 @@ public class UserDAOCookieImpl implements UserDAO{
 
         User loggedUser = new User();
         loggedUser.setUserId(userid);
-        loggedUser.setUsername(username);
+        loggedUser.setNome(nome);
         loggedUser.setAdmin(admin);
 
         Cookie cookie;
@@ -100,7 +100,7 @@ public class UserDAOCookieImpl implements UserDAO{
     private String encode(User loggedUser) {
 
         String encodedLoggedUser;
-        encodedLoggedUser = loggedUser.getUserId() + "#" + loggedUser.getUsername() + "#" + loggedUser.isAdmin();
+        encodedLoggedUser = loggedUser.getUserId() + "#" + loggedUser.getNome() + "#" + loggedUser.isAdmin();
 
         return encodedLoggedUser;
     }
@@ -112,7 +112,7 @@ public class UserDAOCookieImpl implements UserDAO{
         String[] values = encodedLoggedUser.split("#");
 
         loggedUser.setUserId(Long.parseLong(values[0]));
-        loggedUser.setUsername(values[1]);
+        loggedUser.setNome(values[1]);
         boolean isAdmin = values[2].equals("S");    //variabile isAdmin per convertire da stringa a boolean
         loggedUser.setAdmin(isAdmin);
 

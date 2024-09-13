@@ -41,13 +41,20 @@
         <% if (!loggedOn) { %>
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
         <% } else { %>
-        <span>Benvenuto, <%= loggedUser.getNome() %>!</span>
+        <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
+        <a href="Dispatcher?controllerAction=Login.logout" class="buttons">Logout</a>
         <% } %>
         <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>
 </nav>
 
+<script>
+    document.querySelector('.logout-button').addEventListener('click', function() {
+// Logica per il logout, come una chiamata al controller per gestire il logout
+        window.location.href = 'Login.logout'; // Sostituisci con l'URL del tuo logout
+    });
+</script>
 
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
