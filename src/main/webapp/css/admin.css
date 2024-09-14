@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Anek Bangla', sans-serif;
+    color: #333;
+    background-image: url("../images/admin.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    height: 99vh; /* Altezza uguale all'altezza della viewport */
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.admin-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.admin-section h2 {
+    margin: 0;
+    font-family: 'Anek Bangla', sans-serif;
+}
+
+.admin-section button {
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0;
+    margin-right: 8px;
+    padding: 10px;
+    font-family: 'Anek Bangla', sans-serif;
+}
+
+.start-button {
+    width: 210px;
+}
+
+.admin-section-content {
+        display: none; /* Nascondi le sezioni inizialmente */
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease; /* Transizione per un effetto più fluido */
+        border: none;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    height: 55px;
+    font-family: 'Anek Bangla', sans-serif;
+}
+
+.navbar-brand a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family:'Oswald', sans-serif;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.navbar-right .buttons {
+    color: #fff;
+    cursor: pointer;
+    background-color: transparent;
+    text-decoration: none;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 2rem;
+    border-radius: 4px;
+}
+
+.navbar-right .buttons:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+div#userManagement {
+    background-color: transparent;
+    border: none;
+    margin-top: 0px;
+}
+div#catalogManagement {
+    background-color: transparent;
+    border: none;
+    margin-top: 0px;
+}
+div#orderManagement {
+    background-color: transparent;
+    border: none;
+    margin-top: 0px;
+}

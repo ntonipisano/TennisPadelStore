@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.pisano.tennispadelstore.model.dao.OrderDAO;
 import com.pisano.tennispadelstore.model.mo.Order;
+import com.pisano.tennispadelstore.model.mo.Product;
 
 public class OrderDAOMySQLJDBCImpl implements OrderDAO {
 
@@ -127,6 +128,22 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List <Order> findAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM order WHERE deleted ='N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    orders.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
     }
 
     Order read(ResultSet rs) {

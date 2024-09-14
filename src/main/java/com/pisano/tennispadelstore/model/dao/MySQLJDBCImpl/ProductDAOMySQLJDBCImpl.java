@@ -235,7 +235,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public List <Product> findFeaturedProducts() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM product WHERE vetrina = 'S'";
+        String sql = "SELECT * FROM product WHERE vetrina = 'S' AND deleted = 'N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

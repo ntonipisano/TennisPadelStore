@@ -22,4 +22,6 @@ public interface OrderDAO {
     public List<Order> findByUserid (Long userid);
 
     public void modStatobyOrderid (Long orderid, String stato);
+
+    public List <Order> findAllOrders ();
 }
