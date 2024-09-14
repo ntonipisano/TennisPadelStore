@@ -252,7 +252,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     @Override
     public List <User> findAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM product WHERE deleted ='N'";
+        String sql = "SELECT * FROM user WHERE deleted ='N'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

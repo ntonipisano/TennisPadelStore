@@ -59,6 +59,7 @@ public class Shop {
             logger.log(Level.SEVERE, "Controller Error", e);
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
+                if (productDAOFactory != null) productDAOFactory.rollbackTransaction();
             } catch (Throwable t) {
             }
             throw new RuntimeException(e);
@@ -66,6 +67,7 @@ public class Shop {
         } finally {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
+                if (productDAOFactory != null) productDAOFactory.closeTransaction();
             } catch (Throwable t) {
             }
         }

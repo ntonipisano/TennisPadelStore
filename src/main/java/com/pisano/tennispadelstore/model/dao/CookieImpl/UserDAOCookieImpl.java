@@ -97,6 +97,9 @@ public class UserDAOCookieImpl implements UserDAO{
     @Override
     public List<Order> getOrdersByUserId(Long userId) { throw new UnsupportedOperationException("Not supported");}
 
+    @Override
+    public List<User> findAllUsers() {throw new UnsupportedOperationException("Not supported");}
+
     private String encode(User loggedUser) {
 
         String encodedLoggedUser;

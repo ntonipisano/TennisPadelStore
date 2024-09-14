@@ -1,6 +1,7 @@
-<%--PAGINA ADMIN SITO--%>
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
+<%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
+<%@ page import="java.util.List" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -14,14 +15,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina amministratori</title>
+    <title>Pagina Prodotti</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin.css">
 </head>
 <body>
 <nav class="navbar">
     <div class="navbar-brand">
         <a href="Dispatcher?controllerAction=Management.view">
-            Tennis & Padel Store - Amministrazione
+            Tennis & Padel Store - Amministrazione Catalogo
         </a>
     </div>
 
@@ -34,28 +35,11 @@
         <% } %>
     </div>
 </nav>
-
-<div class="admin-container">
-    <!-- Gestione Utenti -->
-    <div class="admin-section">
-        <a href="Dispatcher?controllerAction=Management.usermanag">
-        <h2><button class="start-button">Gestione Utenti</button></h2>
-        </a>
-    </div>
-
-    <!-- Gestione Catalogo -->
-    <div class="admin-section">
-        <a href="Dispatcher?controllerAction=Management.productmanag">
-        <h2><button class="start-button">Gestione Catalogo</button></h2>
-        </a>
-    </div>
-
-    <!-- Gestione Ordini -->
-    <div class="admin-section">
-        <a href="Dispatcher?controllerAction=Management.ordermanag">
-        <h2><button class="start-button">Gestione Ordini</button></h2>
-        </a>
-    </div>
+<div class="back-link">
+    <a href="Dispatcher?controllerAction=Management.view">Torna indietro</a>
 </div>
+
+
+
 </body>
 </html>
