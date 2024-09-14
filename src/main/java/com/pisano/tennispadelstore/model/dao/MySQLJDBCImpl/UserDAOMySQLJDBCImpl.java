@@ -249,6 +249,22 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         throw new UnsupportedOperationException("Not supported");
     }
 
+    @Override
+    public List <User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE deleted ='N'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    users.add(read(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     User read(ResultSet rs) {
 
         User user = new User();

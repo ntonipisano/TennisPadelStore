@@ -57,7 +57,7 @@ public class Management {
             Map orderFactoryParameters = new HashMap<String, Object>();
             orderFactoryParameters.put("request", request);
             orderFactoryParameters.put("response", response);
-            orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
+            orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, orderFactoryParameters);
             orderDAOFactory.beginTransaction();
 
             OrderDAO orderDAO = orderDAOFactory.getOrderDAO();

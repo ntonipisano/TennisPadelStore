@@ -42,7 +42,7 @@ public class HomeManagement {
             loggedUser = sessionUserDAO.findLoggedUser();
 
             /*Factory per Product che va nel db */
-            Map<String, Object> productFactoryParameters = new HashMap<>();
+            Map productFactoryParameters = new HashMap<String, Object>();
             productFactoryParameters.put("request", request);
             productFactoryParameters.put("response", response);
             productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
