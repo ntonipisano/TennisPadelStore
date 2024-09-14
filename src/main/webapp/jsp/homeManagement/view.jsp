@@ -49,13 +49,6 @@
     </div>
 </nav>
 
-<script>
-    document.querySelector('.logout-button').addEventListener('click', function() {
-// Logica per il logout, come una chiamata al controller per gestire il logout
-        window.location.href = 'Login.logout'; // Sostituisci con l'URL del tuo logout
-    });
-</script>
-
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
 <div class="alert">

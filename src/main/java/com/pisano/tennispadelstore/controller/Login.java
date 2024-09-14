@@ -8,7 +8,6 @@ import com.pisano.tennispadelstore.services.config.Configuration;
 import com.pisano.tennispadelstore.services.logservice.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,9 +98,6 @@ public class Login {
                 applicationMessage = "Username o password errati!";
                 loggedUser=null;
             } else {
-                /*HttpSession session = request.getSession();
-                session.setAttribute("loggedUser", user);
-                loggedUser = user;*/
                 //CREO IL COOKIE
                 loggedUser = sessionUserDAO.create(user.getUserId(), null,null, user.getNome(),null,user.isAdmin());
             }
@@ -109,20 +105,13 @@ public class Login {
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
 
-            /*
-            request.setAttribute("loggedOn", loggedUser != null);
-            request.setAttribute("loggedUser", loggedUser);
-            request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("viewUrl", loggedUser != null ? "homeManagement/view" : "login/view");
-            */
-
             if (loggedUser != null) {
+                //Chiamo il metodo view prima per caricare i prodotti nella home
+                HomeManagement.view(request, response);
                 request.setAttribute("loggedOn", loggedUser != null);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage", applicationMessage);
-                // Chiama il metodo view del controller HomeManagement
-                Shop.view(request, response);
-                //request.setAttribute("viewUrl","homeManagement/view");
+                request.setAttribute("viewUrl","homeManagement/view");
             } else {
                 request.setAttribute("loggedOn", loggedUser != null);
                 request.setAttribute("loggedUser", loggedUser);
@@ -174,19 +163,16 @@ public class Login {
             String password = request.getParameter("password");
             String adminkey = request.getParameter("adminkey");
 
-            // Verifica della chiave amministrativa
+            // Verifica chiave amministratore
             AdminkeyDAO adminkeyDAO = daoFactory.getAdminkeyDAO();
             boolean isValidKey = adminkeyDAO.Checkkey() != null && adminkeyDAO.Checkkey().equals(adminkey);
 
             if (isValidKey) {
-                // Verifica delle credenziali dell'amministratore
+                // Verifica credenziali amministratore
                 UserDAO userDAO = daoFactory.getUserDAO();
                 User admin = userDAO.findByUsername(username);
 
                 if (admin != null && admin.getPassword().equals(password) && admin.isAdmin()) {
-                    /*HttpSession session = request.getSession();
-                    session.setAttribute("loggedUser", admin);
-                    loggedUser = admin;*/
                     //CREO IL COOKIE
                     loggedUser = sessionUserDAO.create(admin.getUserId(),null,null,admin.getNome(),null,admin.isAdmin());
                 } else {
@@ -235,17 +221,16 @@ public class Login {
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
-            /*HttpSession session = request.getSession();
-            session.invalidate();*/
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
             sessionUserDAO.delete(null);
 
             sessionDAOFactory.commitTransaction();
 
+            //Per caricare i prodotti nella home
+            HomeManagement.view(request, response);
             request.setAttribute("loggedOn", false);
             request.setAttribute("loggedUser", null);
             request.setAttribute("viewUrl", "homeManagement/view");
-            //HomeManagement.view(request,response);
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
