@@ -103,7 +103,7 @@ public class UserDAOCookieImpl implements UserDAO{
     private String encode(User loggedUser) {
 
         String encodedLoggedUser;
-        encodedLoggedUser = loggedUser.getUserId() + "#" + loggedUser.getNome() + "#" + loggedUser.isAdmin();
+        encodedLoggedUser = loggedUser.getUserId() + "#" + loggedUser.getNome() + "#" + (loggedUser.isAdmin() ? "S" : "N");
 
         return encodedLoggedUser;
     }
