@@ -57,7 +57,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             ps.setString(5,product.getCategoria());
             ps.setString(6,product.getBrand());
             ps.setString(7,product.getDisponibilita());
-            ps.setBoolean(8,product.getVetrina());
+            ps.setString(8,product.getVetrina() ? "S" : "N");
             ps.setBlob(9,product.getImage());
 
             ps.executeUpdate();
@@ -84,7 +84,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             ps.setString(4,product.getCategoria());
             ps.setString(5,product.getBrand());
             ps.setString(6,product.getDisponibilita());
-            ps.setBoolean(7,product.getVetrina());
+            ps.setString(7,product.getVetrina() ? "S" : "N");
             ps.setBlob(8,product.getImage());
             ps.setLong(9,product.getProductid());
 

@@ -153,3 +153,22 @@ body {
     width: 100px;
     text-align: center;
 }
+
+.edit-form input[type="text"],
+.edit-form select {
+    padding: 5px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    font-family: "Anek Bangla", sans-serif;
+}
+.edit-form td {
+    padding: 5px;
+}
+.edit-form button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    font-family: "Anek Bangla", sans-serif;
+}
+.edit-form .form-actions {
+    text-align: center;
+}

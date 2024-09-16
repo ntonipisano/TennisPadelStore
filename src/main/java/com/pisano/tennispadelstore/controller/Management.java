@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.PrintWriter;
+import java.util.Base64;
+import java.sql.Blob;
 import java.util.List;
 
 import java.util.HashMap;
@@ -454,6 +456,92 @@ public class Management {
     }
 
     //Modifica prodotto
+    public static void editProduct(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory productDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            Map productFactoryParameters = new HashMap<String, Object>();
+            productFactoryParameters.put("request", request);
+            productFactoryParameters.put("response", response);
+            productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
+            productDAOFactory.beginTransaction();
+
+            //Ricevo i parametri dalla request
+            Long productId = Long.parseLong(request.getParameter("productId"));
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String prezzo = request.getParameter("prezzo");
+            String categoria = request.getParameter("categoria");
+            String brand = request.getParameter("brand");
+            String disponibilita = request.getParameter("disponibilita");
+            String vetrina = request.getParameter("vetrina");
+            String base64Image = request.getParameter("imageBase64");
+
+            ProductDAO productDAO = productDAOFactory.getProductDAO();
+            Product product = productDAO.findByProductId(productId); // Trova il prodotto da modificare
+
+            //Converto la stringa base64 in un Blob, se non ho caricato nessuna immagine, mantengo quella che c'era
+            byte[] imageBytes = null;
+            Blob immagine = null;
+            if (base64Image != null && !base64Image.isEmpty()) {
+                imageBytes = Base64.getDecoder().decode(base64Image);
+                immagine = new javax.sql.rowset.serial.SerialBlob(imageBytes);
+            } else {
+                // Usa l'immagine esistente se non viene fornita una nuova immagine
+                if (product != null) {
+                    immagine = product.getImage();
+                }
+            }
+
+            //Creo un oggetto di tipo product da passare alla update
+            Product productcreated = new Product();
+            productcreated.setProductid(productId);
+            productcreated.setNome(nome);
+            productcreated.setDescrizione(descrizione);
+            productcreated.setPrezzo(prezzo);
+            productcreated.setCategoria(categoria);
+            productcreated.setBrand(brand);
+            productcreated.setDisponibilita(disponibilita);
+            productcreated.setVetrina("S".equals(vetrina));
+            productcreated.setImage(immagine);
+            productcreated.setDeleted(false);
+
+            if (product != null) {
+                productDAO.update(productcreated);
+            }
+            productDAOFactory.commitTransaction();
+
+            Management.productmanag(request, response);
+            request.setAttribute("viewUrl","management/productmanag");
+
+            /*Includo nella risposta uno script per ricaricare la pagina e quindi vedere subito l'aggiornamento*/
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<script type='text/javascript'>");
+            out.println("window.location.href = 'Dispatcher?controllerAction=Management.productmanag';");
+            out.println("</script>");
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (productDAOFactory != null) productDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Rollback Error", t);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (productDAOFactory != null) productDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Close Transaction Error", t);
+            }
+        }
+    }
+
+    //Crea prodotto
 
 
 

@@ -2,6 +2,8 @@
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.sql.Blob"%>
+<%@ page import="java.util.Base64" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -75,7 +77,18 @@
         </thead>
         <tbody>
         <% if (allProducts != null) {
-            for (Product product : allProducts) { %>
+            for (Product product : allProducts) {
+                String base64Image = null;
+                if (product != null && product.getImage() != null) {
+                    try {
+                        Blob imageBlob = product.getImage();
+                        byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
+                        base64Image = Base64.getEncoder().encodeToString(imageData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        %>
         <tr>
             <td class="nome-column"><%= product.getNome() %></td>
             <td class="nome-column"><%= product.getDescrizione() %></td>
@@ -84,7 +97,7 @@
             <td class="prezzo-column"><%= product.getBrand() %></td>
             <td class="prezzo-column"><%= product.getDisponibilita() %></td>
             <td class="prezzo-column"><%= product.getVetrina() ? "Si" : "No" %></td>
-            <td class="immagine-column"><%= product.getImage() %></td>
+            <td class="immagine-column"><img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>" style="width: 130px; height: 130px;"></td>
             <td class="actions-column">
                 <form action="Dispatcher" method="post" style="display:inline;">
                     <input type="hidden" name="controllerAction" value="Management.deleteProduct">
@@ -105,24 +118,62 @@
 
         <!-- Form per la modifica del prodotto -->
         <tr id="edit-form-<%= product.getProductid() %>" style="display: none;">
-            <form action="Dispatcher" method="post">
-                <input type="hidden" name="controllerAction" value="Management.saveProduct">
-                <input type="hidden" name="productId" value="<%= product.getProductid() %>">
-                <td class="nome-column"><input type="text" name="nome" value="<%= product.getNome() %>"></td>
-                <td class="nome-column"><input type="text" name="descrizione" value="<%= product.getDescrizione() %>"></td>
-                <td class="prezzo-column"><input type="text" name="prezzo" value="<%= product.getPrezzo() %>"></td>
-                <td class="prezzo-column"><input type="text" name="categoria" value="<%= product.getCategoria() %>"></td>
-                <td class="prezzo-column"><input type="text" name="brand" value="<%= product.getBrand() %>"></td>
-                <td class="prezzo-column"><input type="text" name="disponibilita" value="<%= product.getDisponibilita() %>"></td>
-                <td class="prezzo-column"><input type="checkbox" name="vetrina" <%= product.getVetrina() ? "checked" : "" %>></td>
-                <td class="immagine-column">Immagine non modificabile</td>
-                <td class="actions-column">
-                    <button type="submit">Salva</button>
-                    <button type="button" onclick="hideEditForm(<%= product.getProductid() %>)">Annulla</button>
-                </td>
-            </form>
+            <td colspan="9">
+                <form class="edit-form" action="Dispatcher" method="post">
+                    <input type="hidden" name="controllerAction" value="Management.editProduct">
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>Nome</td>
+                            <td><input type="text" name="nome" value="<%= product.getNome() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Descrizione</td>
+                            <td><input type="text" name="descrizione" value="<%= product.getDescrizione() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Prezzo</td>
+                            <td><input type="text" name="prezzo" value="<%= product.getPrezzo() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Categoria</td>
+                            <td><input type="text" name="categoria" value="<%= product.getCategoria() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Brand</td>
+                            <td><input type="text" name="brand" value="<%= product.getBrand() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilita'</td>
+                            <td><input type="text" name="disponibilita" value="<%= product.getDisponibilita() %>" required></td>
+                        </tr>
+                        <tr>
+                            <td>Vetrina</td>
+                            <td>
+                                <!-- <input type="checkbox" name="vetrina" <%= product.getVetrina() ? "checked" : "" %>> -->
+                                <select name="vetrina" id="vetrina">
+                                    <option value="S" <%= product.getVetrina() ? "selected" : "" %>>Si</option>
+                                    <option value="N" <%= !product.getVetrina() ? "selected" : "" %>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Immagine</td>
+                            <td>
+                                <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>" style="width: 130px; height: 130px;">
+                                <input type="file" name="image" accept="image/*">
+                            </td>
+                        </tr>
+                        <tr class="form-actions">
+                            <td colspan="2">
+                                <button type="submit">Salva</button>
+                                <button type="button" onclick="hideEditForm(<%= product.getProductid() %>)">Annulla</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
         </tr>
-
         <% }} %>
         </tbody>
     </table>
