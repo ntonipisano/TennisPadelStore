@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.pisano.tennispadelstore.model.mo.User;
 import com.pisano.tennispadelstore.model.dao.UserDAO;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 public class UserDAOCookieImpl implements UserDAO{
@@ -30,7 +31,8 @@ public class UserDAOCookieImpl implements UserDAO{
 
         User loggedUser = new User();
         loggedUser.setUserId(userid);
-        loggedUser.setNome(nome);
+        String nospaceName = nome.replace(" ","");
+        loggedUser.setNome(nospaceName);
         loggedUser.setAdmin(admin);
 
         Cookie cookie;
