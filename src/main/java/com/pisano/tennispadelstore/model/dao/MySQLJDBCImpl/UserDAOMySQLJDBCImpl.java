@@ -167,17 +167,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = read(rs);
-                    /*
-                    User user = new User();
-                    user.setUserId(rs.getLong("userid"));
-                    user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
-                    user.setNome(rs.getString("nome"));
-                    user.setCognome(rs.getString("cognome"));
-                    user.setAdmin(rs.getString("admin").equals("S"));
-                    user.setDeleted(rs.getString("deleted").equals("S"));
-                    return user;
-                    */
                 }
             }
         } catch (SQLException e) {
