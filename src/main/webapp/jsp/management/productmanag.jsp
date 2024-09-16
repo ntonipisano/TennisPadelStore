@@ -18,6 +18,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina Prodotti</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin.css">
+    <script>
+        function showEditForm(productId) {
+            // Mostra i campi di input e il bottone "Salva"
+            document.getElementById('edit-form-' + productId).style.display = 'block';
+            document.getElementById('product-info-' + productId).style.display = 'none';
+        }
+
+        function hideEditForm(productId) {
+            // Nasconde i campi di input e mostra le informazioni originali
+            document.getElementById('edit-form-' + productId).style.display = 'none';
+            document.getElementById('product-info-' + productId).style.display = 'table-row';
+        }
+    </script>
 </head>
 <body>
 <nav class="navbar">
@@ -75,31 +88,44 @@
             <td class="actions-column">
                 <form action="Dispatcher" method="post" style="display:inline;">
                     <input type="hidden" name="controllerAction" value="Management.deleteProduct">
-                    <input type="hidden" name="userId" value="<%= product.getProductid() %>">
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>">
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>">
                     <button type="submit" style="font-family:Anek Bangla,sans-serif">Elimina Prodotto</button>
                 </form>
-
+                <!--
                 <form action="Dispatcher" method="post" style="display:inline;">
                     <input type="hidden" name="controllerAction" value="Management.editProduct">
                     <input type="hidden" name="userId" value="<%= product.getProductid() %>">
                     <button type="submit" style="font-family:Anek Bangla,sans-serif">Modifica Prodotto</button>
                 </form>
-
-                <!--
-                <form action="Dispatcher" method="post" style="display:inline;">
-                    <input type="hidden" name="controllerAction" value="Management.removeAdmin">
-                    <input type="hidden" name="userId" value="<%= product.getProductid() %>">
-                    <button type="submit" style="font-family:Anek Bangla,sans-serif">Rimuovi Amministratore</button>
-                </form>
                 -->
+                <button style="font-family:Anek Bangla,sans-serif" onclick="showEditForm(<%= product.getProductid() %>)">Modifica Prodotto</button>
             </td>
         </tr>
+
+        <!-- Form per la modifica del prodotto -->
+        <tr id="edit-form-<%= product.getProductid() %>" style="display: none;">
+            <form action="Dispatcher" method="post">
+                <input type="hidden" name="controllerAction" value="Management.saveProduct">
+                <input type="hidden" name="productId" value="<%= product.getProductid() %>">
+                <td class="nome-column"><input type="text" name="nome" value="<%= product.getNome() %>"></td>
+                <td class="nome-column"><input type="text" name="descrizione" value="<%= product.getDescrizione() %>"></td>
+                <td class="prezzo-column"><input type="text" name="prezzo" value="<%= product.getPrezzo() %>"></td>
+                <td class="prezzo-column"><input type="text" name="categoria" value="<%= product.getCategoria() %>"></td>
+                <td class="prezzo-column"><input type="text" name="brand" value="<%= product.getBrand() %>"></td>
+                <td class="prezzo-column"><input type="text" name="disponibilita" value="<%= product.getDisponibilita() %>"></td>
+                <td class="prezzo-column"><input type="checkbox" name="vetrina" <%= product.getVetrina() ? "checked" : "" %>></td>
+                <td class="immagine-column">Immagine non modificabile</td>
+                <td class="actions-column">
+                    <button type="submit">Salva</button>
+                    <button type="button" onclick="hideEditForm(<%= product.getProductid() %>)">Annulla</button>
+                </td>
+            </form>
+        </tr>
+
         <% }} %>
         </tbody>
     </table>
-
-    <!-- Aggiungi prodotto -->
-
 </div>
 </body>
 </html>

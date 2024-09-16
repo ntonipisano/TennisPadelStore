@@ -18,9 +18,7 @@ public interface ProductDAO {
             Blob image);
 
     public void update(Product product);
-
     public void delete(Product product);
-
     public Product findByProductId(Long productid);
     public List <Product> findbyCategory (String categoria);
     public List <Product> findbyBrand (String brand);

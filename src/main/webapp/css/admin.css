@@ -96,22 +96,6 @@ body {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-div#userManagement {
-    background-color: transparent;
-    border: none;
-    margin-top: 0px;
-}
-div#catalogManagement {
-    background-color: transparent;
-    border: none;
-    margin-top: 0px;
-}
-div#orderManagement {
-    background-color: transparent;
-    border: none;
-    margin-top: 0px;
-}
-
 .back-link {
     margin-bottom: 10px;
 }

@@ -289,7 +289,6 @@ public class Management {
             out.println("</script>");
             out.println("</body></html>");
 
-            // Inoltra alla pagina di successo o mostra un messaggio appropriato
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
             try {
@@ -403,4 +402,60 @@ public class Management {
             }
         }
     }
+
+    //Elimina prodotto
+    public static void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory productDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            Map productFactoryParameters = new HashMap<String, Object>();
+            productFactoryParameters.put("request", request);
+            productFactoryParameters.put("response", response);
+            productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
+            productDAOFactory.beginTransaction();
+
+            Long productId = Long.parseLong(request.getParameter("productId"));
+            ProductDAO productDAO = productDAOFactory.getProductDAO();
+            Product product = productDAO.findByProductId(productId); // Trova il prodotto da eliminare
+
+            if (product != null) {
+                productDAO.delete(product);
+            }
+            productDAOFactory.commitTransaction();
+
+            Management.productmanag(request, response);
+            request.setAttribute("viewUrl","management/productmanag");
+
+            /*Includo nella risposta uno script per ricaricare la pagina e quindi vedere subito l'aggiornamento*/
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<script type='text/javascript'>");
+            out.println("window.location.href = 'Dispatcher?controllerAction=Management.productmanag';");
+            out.println("</script>");
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (productDAOFactory != null) productDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Rollback Error", t);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (productDAOFactory != null) productDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Close Transaction Error", t);
+            }
+        }
+    }
+
+    //Modifica prodotto
+
+
+
+
     }
