@@ -314,3 +314,12 @@ footer {
 .add-to-cart-btn:hover {
     background-color: #218838;
 }
+
+/* Stili per la navbar dei filtri */
+.filter-navbar {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0rem;
+}

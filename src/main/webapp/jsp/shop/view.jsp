@@ -87,6 +87,46 @@
     </div>
 </nav>
 
+<!-- Filtri Shop -->
+<nav class="navbar">
+<div class="filter-navbar">
+    <form action="Dispatcher" method="post">
+        <input type="hidden" name="controllerAction" value="Shop.filterProducts">
+
+            <label for="category" style="margin-left: 10px">Categoria </label>
+            <select id="category" name="category" style="font-family: 'Inter', sans-serif">
+                <!-- Opzioni per categoria -->
+                <option value="*">Tutte</option>
+                <option value="Racchette">Racchette</option>
+                <option value="Scarpe">Scarpe</option>
+                <option value="Abbigliamento">Abbigliamento</option>
+                <option value="Accessori">Accessori</option>
+            </select>
+
+            <label for="brand" style="margin-left: 10px">Brand </label>
+            <select id="brand" name="brand" style="font-family: 'Inter', sans-serif; width: 114px">
+                <!-- Opzioni per brand -->
+                <option value="*">Tutti</option>
+                <option value="Nike">Nike</option>
+                <option value="Adidas">Adidas</option>
+                <option value="Wilson">Wilson</option>
+                <option value="Head">Head</option>
+                <option value="Lacoste">Lacoste</option>
+                <option value="Bullpadel">Bullpadel</option>
+                <option value="Asics">Asics</option>
+            </select>
+
+            <label for="minPrice" style="margin-left: 10px">Prezzo Minimo </label>
+            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="minPrice" name="minPrice" placeholder="Min">
+
+            <label for="maxPrice" style="margin-left: 10px">Prezzo Massimo </label>
+            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="maxPrice" name="maxPrice" placeholder="Max">
+
+            <button type="button" id="resetFilters" style=" margin-left: 10px; padding: 0.2rem 1.8rem; border: none; border-radius: 0 4px 4px 0; background-color: #f05a28; color: #fff; cursor: pointer; font-family: 'Inter', sans-serif;">Filtra</button>
+    </form>
+</div>
+</nav>
+
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
 <div class="alert">

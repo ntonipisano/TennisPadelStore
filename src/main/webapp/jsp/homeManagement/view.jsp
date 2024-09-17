@@ -31,12 +31,11 @@
             Tennis & Padel Store
         </a>
     </div>
+
     <div class="search-bar">
-        <form action="searchProducts" method="get">
-            <input type="text" name="query" placeholder="Cerca prodotti...">
-            <button type="submit">Cerca</button>
-        </form>
+        <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Vai al Negozio</a>
     </div>
+
     <div class="navbar-right">
         <% if (!loggedOn) { %>
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
@@ -92,7 +91,7 @@
 <div class="shop-section">
     <h2>Scopri il Nostro Shop</h2>
     <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
-    <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Vai allo Shop</a>
+    <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Visita il nostro Shop Online</a>
 </div>
 
 <!-- Footer -->

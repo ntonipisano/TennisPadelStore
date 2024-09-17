@@ -233,6 +233,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
     }
 
+    /* Metodo che ritorna i prodotti in vetrina*/
     @Override
     public List <Product> findFeaturedProducts() {
         List<Product> products = new ArrayList<>();
@@ -249,6 +250,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
+    /*Metodo che ritorna tutti i prodotti*/
     @Override
     public List <Product> findAllProducts() {
         List<Product> products = new ArrayList<>();
@@ -265,8 +267,54 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
-    Product read(ResultSet rs) {
+    /*Metodo che applica il filtro sui prodotti*/
+    public List<Product> findProductsbyFilters(String category, String brand, String minPriceStr, String maxPriceStr) {
+        List<Product> products = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT * FROM product WHERE deleted = 'N'");
 
+        // Aggiungi filtri alla query
+        if (!"*".equals(category)) {
+            query.append(" AND categoria = ?");
+        }
+        if (!"*".equals(brand)) {
+            query.append(" AND brand = ?");
+        }
+        if (minPriceStr != null && !minPriceStr.isEmpty()) {
+            query.append(" AND REPLACE(prezzo, '€', '') >= ?");
+        }
+        if (maxPriceStr != null && !maxPriceStr.isEmpty()) {
+            query.append(" AND REPLACE(prezzo, '€', '') <= ?");
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())) {
+            int index = 1;
+            if (!"*".equals(category)) {
+                ps.setString(index++, category);
+            }
+            if (!"*".equals(brand)) {
+                ps.setString(index++, brand);
+            }
+            if (minPriceStr != null && !minPriceStr.isEmpty()) {
+                ps.setString(index++, minPriceStr);
+            }
+            if (maxPriceStr != null && !maxPriceStr.isEmpty()) {
+                ps.setString(index++, maxPriceStr);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Product product = read(rs);
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return products;
+    }
+
+    Product read(ResultSet rs) {
         Product product = new Product();
         try {
             product.setProductid(rs.getLong("productid"));
