@@ -13,7 +13,9 @@ import com.pisano.tennispadelstore.services.config.Configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Base64;
 import java.sql.Blob;
@@ -476,22 +478,26 @@ public class Management {
             String brand = request.getParameter("brand");
             String disponibilita = request.getParameter("disponibilita");
             String vetrina = request.getParameter("vetrina");
-            String base64Image = request.getParameter("imageBase64");
 
             ProductDAO productDAO = productDAOFactory.getProductDAO();
             Product product = productDAO.findByProductId(productId); // Trova il prodotto da modificare
+            if (product == null) {
+                throw new RuntimeException("Prodotto non trovato con ID: " + productId);
+            }
 
-            //Converto la stringa base64 in un Blob, se non ho caricato nessuna immagine, mantengo quella che c'era
-            byte[] imageBytes = null;
+            // Ricevo l'immagine sotto forma di part
+            Part filePart = request.getPart("image");
             Blob immagine = null;
-            if (base64Image != null && !base64Image.isEmpty()) {
-                imageBytes = Base64.getDecoder().decode(base64Image);
-                immagine = new javax.sql.rowset.serial.SerialBlob(imageBytes);
+
+            if (filePart != null && filePart.getSize() > 0) {
+                // Se viene fornita una nuova immagine, la converto in Blob
+                try (InputStream inputStream = filePart.getInputStream()) {
+                    byte[] imageBytes = inputStream.readAllBytes();
+                    immagine = new javax.sql.rowset.serial.SerialBlob(imageBytes);
+                }
             } else {
                 // Usa l'immagine esistente se non viene fornita una nuova immagine
-                if (product != null) {
-                    immagine = product.getImage();
-                }
+                immagine = product.getImage();
             }
 
             //Creo un oggetto di tipo product da passare alla update
@@ -542,7 +548,73 @@ public class Management {
     }
 
     //Crea prodotto
+    public static void addProduct(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory productDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
 
+        try {
+            Map productFactoryParameters = new HashMap<String, Object>();
+            productFactoryParameters.put("request", request);
+            productFactoryParameters.put("response", response);
+            productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
+            productDAOFactory.beginTransaction();
+
+            //Ricevo i parametri dalla request
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String prezzo = request.getParameter("prezzo");
+            String categoria = request.getParameter("categoria");
+            String brand = request.getParameter("brand");
+            String disponibilita = request.getParameter("disponibilita");
+            String vetrina = request.getParameter("vetrina");
+            Boolean vetrinaok = vetrina.equals("S");
+
+            //Ricevo l'immagine sottoforma di part
+            Part filePart = request.getPart("image");
+
+            //Converto part in blob
+            Blob immagine = null;
+
+            if (filePart != null && filePart.getSize() > 0) {
+                try (InputStream inputStream = filePart.getInputStream()) {
+                    byte[] imageBytes = inputStream.readAllBytes();
+                    immagine = new javax.sql.rowset.serial.SerialBlob(imageBytes);
+                }
+            }
+
+            ProductDAO productDAO = productDAOFactory.getProductDAO();
+            Product product = productDAO.create(nome, descrizione, prezzo, categoria, brand, disponibilita, vetrinaok, immagine);
+
+            productDAOFactory.commitTransaction();
+
+            Management.productmanag(request, response);
+            request.setAttribute("viewUrl","management/productmanag");
+
+            /*Includo nella risposta uno script per ricaricare la pagina e quindi vedere subito l'aggiornamento*/
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<script type='text/javascript'>");
+            out.println("window.location.href = 'Dispatcher?controllerAction=Management.productmanag';");
+            out.println("</script>");
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (productDAOFactory != null) productDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Rollback Error", t);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (productDAOFactory != null) productDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Close Transaction Error", t);
+            }
+        }
+    }
 
 
 

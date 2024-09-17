@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface ProductDAO {
     public Product create(
-            Long productid,
             String nome,
             String descrizione,
             String prezzo,

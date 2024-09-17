@@ -7,11 +7,17 @@ import java.rmi.ServerException;
 import java.util.logging.Level;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.pisano.tennispadelstore.services.logservice.LogService;
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 50 // 50 MB
+)
 
 @WebServlet(name = "Dispatcher", urlPatterns = {"/Dispatcher"})
 public class Dispatcher extends HttpServlet {

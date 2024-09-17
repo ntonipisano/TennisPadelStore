@@ -1,12 +1,8 @@
 package com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.sql.Blob;
 
 import com.pisano.tennispadelstore.model.dao.ProductDAO;
 import com.pisano.tennispadelstore.model.mo.Product;
@@ -20,8 +16,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     /*Metodo per salvare un nuovo prodotto sul db*/
     @Override
-    public Product create (
-            Long productid,
+    public Product create(
             String nome,
             String descrizione,
             String prezzo,
@@ -29,10 +24,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             String brand,
             String disponibilita,
             boolean vetrina,
-            Blob image ) {
+            Blob image) {
 
         Product product = new Product();
-        product.setProductid(productid);
         product.setNome(nome);
         product.setDescrizione(descrizione);
         product.setPrezzo(prezzo);
@@ -46,23 +40,30 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         PreparedStatement ps;
 
         try {
-            String sql = "INSERT INTO product (productid, nome, descrizione, prezzo, categoria, brand, disponibilita, vetrina, deleted, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'N', ?)";
+            String sql = "INSERT INTO product (nome, descrizione, prezzo, categoria, brand, disponibilita, vetrina, deleted, image) VALUES (?, ?, ?, ?, ?, ?, ?, 'N', ?)";
 
-            ps = conn.prepareStatement(sql);
+            // Usa RETURN_GENERATED_KEYS per ottenere l'ID generato dal database
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setLong(1,product.getProductid());
-            ps.setString(2,product.getNome());
-            ps.setString(3,product.getDescrizione());
-            ps.setString(4,product.getPrezzo());
-            ps.setString(5,product.getCategoria());
-            ps.setString(6,product.getBrand());
-            ps.setString(7,product.getDisponibilita());
-            ps.setString(8,product.getVetrina() ? "S" : "N");
-            ps.setBlob(9,product.getImage());
+            ps.setString(1, product.getNome());
+            ps.setString(2, product.getDescrizione());
+            ps.setString(3, product.getPrezzo());
+            ps.setString(4, product.getCategoria());
+            ps.setString(5, product.getBrand());
+            ps.setString(6, product.getDisponibilita());
+            ps.setString(7, product.getVetrina() ? "S" : "N");
+            ps.setBlob(8, product.getImage());
 
             ps.executeUpdate();
-        }
-        catch(SQLException e) {
+
+            // Recupera il productid generato
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                product.setProductid(generatedKeys.getLong(1));
+            } else {
+                throw new SQLException("Creating product failed, no ID obtained.");
+            }
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return product;
