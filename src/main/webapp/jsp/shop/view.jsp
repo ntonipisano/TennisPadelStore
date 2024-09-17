@@ -20,6 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis & Padel Store</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -90,10 +91,10 @@
 <!-- Filtri Shop -->
 <nav class="navbar">
 <div class="filter-navbar">
-    <form action="Dispatcher" method="post">
+    <form action="Dispatcher" method="post" id="filterForm">
         <input type="hidden" name="controllerAction" value="Shop.filterProducts">
 
-            <label for="category" style="margin-left: 10px">Categoria </label>
+            <label for="category" style="margin-left: 10px">Categoria</label>
             <select id="category" name="category" style="font-family: 'Inter', sans-serif">
                 <!-- Opzioni per categoria -->
                 <option value="*">Tutte</option>
@@ -107,6 +108,7 @@
             <select id="brand" name="brand" style="font-family: 'Inter', sans-serif; width: 114px">
                 <!-- Opzioni per brand -->
                 <option value="*">Tutti</option>
+                <option value="Babolat">Babolat</option>
                 <option value="Nike">Nike</option>
                 <option value="Adidas">Adidas</option>
                 <option value="Wilson">Wilson</option>
@@ -122,7 +124,7 @@
             <label for="maxPrice" style="margin-left: 10px">Prezzo Massimo </label>
             <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="maxPrice" name="maxPrice" placeholder="Max">
 
-            <button type="button" id="resetFilters" style=" margin-left: 10px; padding: 0.2rem 1.8rem; border: none; border-radius: 0 4px 4px 0; background-color: #f05a28; color: #fff; cursor: pointer; font-family: 'Inter', sans-serif;">Filtra</button>
+            <button type="button" id="resetFilters" style=" margin-left: 10px; padding: 0.2rem 1.8rem; border: none; border-radius: 0 4px 4px 0; background-color: #f05a28; color: #fff; cursor: pointer; font-family: 'Inter', sans-serif;">Resetta filtri</button>
     </form>
 </div>
 </nav>
@@ -135,8 +137,9 @@
 <% } %>
 
 <div class="container">
-    <h2>Tutti i nostri prodotti</h2>
-    <div class="featured-products">
+    <h2>I nostri prodotti</h2>
+    <div class="featured-products" id="productResults">
+        <!-- I prodotti filtrati saranno inseriti dinamicamente qui (si spera)-->
         <%
             List<Product> allProducts = (List<Product>) request.getAttribute("allProducts");
             for (Product product : allProducts) {
@@ -164,7 +167,6 @@
         %>
     </div>
 </div>
-
 <footer>
     <div class="footer-content">
         <div class="footer-left">
@@ -183,6 +185,36 @@
         <h5>&copy; 2024 Tennis & Padel Store. Tutti i diritti riservati.</h5>
     </div>
 </footer>
+
+<!-- Script per filtraggio dinamico -->
+<script>
+    $(document).ready(function() {
+        function loadProducts() {
+            $.ajax({
+                url: 'Dispatcher?controllerAction=Shop.filterProducts',
+                type: 'POST',
+                data: $('#filterForm').serialize(),
+                success: function(data) {
+                    $('#productResults').html(data);
+                },
+                error: function() {
+                    $('#productResults').html('<p>Errore durante il caricamento dei prodotti</p>');
+                }
+            });
+        }
+
+        // Applicazione dei filtri al cambiamento di qualsiasi campo
+        $('#filterForm select, #filterForm input').on('change keyup', function() {
+            loadProducts();
+        });
+
+        // Reset dei filtri
+        $('#resetFilters').on('click', function() {
+            $('#filterForm')[0].reset();
+            loadProducts();
+        });
+    });
+</script>
 
 </body>
 </html>

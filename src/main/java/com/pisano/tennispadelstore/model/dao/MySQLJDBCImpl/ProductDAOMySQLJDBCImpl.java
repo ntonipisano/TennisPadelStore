@@ -3,9 +3,11 @@ package com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.pisano.tennispadelstore.model.dao.ProductDAO;
 import com.pisano.tennispadelstore.model.mo.Product;
+import com.pisano.tennispadelstore.services.logservice.LogService;
 
 public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
@@ -269,6 +271,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     /*Metodo che applica il filtro sui prodotti*/
     public List<Product> findProductsbyFilters(String category, String brand, String minPriceStr, String maxPriceStr) {
+        Logger logger = LogService.getApplicationLogger();
         List<Product> products = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM product WHERE deleted = 'N'");
 
@@ -311,6 +314,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        logger.info("Number of products found: " + products.size());
         return products;
     }
 

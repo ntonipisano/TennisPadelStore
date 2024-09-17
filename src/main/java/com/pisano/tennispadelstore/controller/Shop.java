@@ -105,13 +105,15 @@ public class Shop {
             ProductDAO productDAO = productDAOFactory.getProductDAO();
             List<Product> filteredProducts = productDAO.findProductsbyFilters(category, brand, minPrice, maxPrice);
 
+            sessionDAOFactory.commitTransaction();
+            productDAOFactory.commitTransaction();
+
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("viewUrl", "shop/view");
             request.setAttribute("filteredProducts", filteredProducts);
 
-            sessionDAOFactory.commitTransaction();
-            productDAOFactory.commitTransaction();
+            request.getRequestDispatcher("/WEB-INF/productResults.jsp").forward(request, response);
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
