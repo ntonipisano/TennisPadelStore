@@ -11,6 +11,8 @@
     User loggedUser = (User) request.getAttribute("loggedUser");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Home";
+    List<Product> searchProducts = (List<Product>) request.getAttribute("searchProducts");
+    List<Product> allProducts = (List<Product>) request.getAttribute("allProducts");
 %>
 
 <!DOCTYPE html>
@@ -37,7 +39,7 @@
         return null;
     }
 
-    // Funzione per ricaricare la pagina se necessario
+    // Funzione per ricaricare la pagina
     function handlePageReload() {
         // Se la pagina non è mai stata ricaricata, ricarica la prima volta
         if (!localStorage.getItem("firstLoad")) {
@@ -57,11 +59,8 @@
             localStorage.removeItem("loginReloaded");
         }
     }
-
-    // Esegui la funzione di gestione del ricaricamento della pagina
     handlePageReload();
 </script>
-
 
 <nav class="navbar">
     <div class="navbar-brand">
@@ -70,11 +69,14 @@
         </a>
     </div>
     <div class="search-bar">
-        <form action="searchProducts" method="get">
+        <form action="Dispatcher" method="post" id="searchForm" name="searchForm">
+            <input type="hidden" name="controllerAction" value="Shop.searchProducts"/>
+
             <input type="text" name="query" placeholder="Cerca prodotti...">
             <button type="submit">Cerca</button>
         </form>
     </div>
+
     <div class="navbar-right">
         <% if (!loggedOn) { %>
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
@@ -88,15 +90,15 @@
     </div>
 </nav>
 
-<!-- Filtri Shop -->
+<!--Filtri Shop -->
 <nav class="navbar">
 <div class="filter-navbar">
-    <form action="Dispatcher" method="post" id="filterForm">
-        <input type="hidden" name="controllerAction" value="Shop.filterProducts">
 
-            <label for="category" style="margin-left: 10px">Categoria</label>
+    <form name ="filterForm" id="filterForm">
+
+        <!-- Opzioni per categoria -->
+           <label for="category" style="margin-left: 10px">Categoria</label>
             <select id="category" name="category" style="font-family: 'Inter', sans-serif">
-                <!-- Opzioni per categoria -->
                 <option value="*">Tutte</option>
                 <option value="Racchette">Racchette</option>
                 <option value="Scarpe">Scarpe</option>
@@ -104,9 +106,9 @@
                 <option value="Accessori">Accessori</option>
             </select>
 
+        <!-- Opzioni per brand -->
             <label for="brand" style="margin-left: 10px">Brand </label>
             <select id="brand" name="brand" style="font-family: 'Inter', sans-serif; width: 114px">
-                <!-- Opzioni per brand -->
                 <option value="*">Tutti</option>
                 <option value="Babolat">Babolat</option>
                 <option value="Nike">Nike</option>
@@ -118,11 +120,12 @@
                 <option value="Asics">Asics</option>
             </select>
 
+            <!-- Opzioni prezzo -->
             <label for="minPrice" style="margin-left: 10px">Prezzo Minimo </label>
-            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="minPrice" name="minPrice" placeholder="Min">
+            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="minPrice" name="minPrice" placeholder="Prezzo Min">
 
             <label for="maxPrice" style="margin-left: 10px">Prezzo Massimo </label>
-            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="maxPrice" name="maxPrice" placeholder="Max">
+            <input type="number" style="width: 100px; font-family: 'Inter', sans-serif" id="maxPrice" name="maxPrice" placeholder="Prezzo Max">
 
             <button type="button" id="resetFilters" style=" margin-left: 10px; padding: 0.2rem 1.8rem; border: none; border-radius: 0 4px 4px 0; background-color: #f05a28; color: #fff; cursor: pointer; font-family: 'Inter', sans-serif;">Resetta filtri</button>
     </form>
@@ -136,25 +139,41 @@
 </div>
 <% } %>
 
-<div class="container">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchForm = document.getElementById('searchForm');
+        const productResults = document.getElementById('searchResults');
+
+        searchForm.addEventListener('submit', function() {
+            // Mostra il div dei risultati solo dopo che il form è stato inviato
+            productResults.style.display = 'block';
+        });
+    });
+</script>
+
+<div class="container" style="min-height: 219px;">
     <h2>I nostri prodotti</h2>
-    <div class="featured-products" id="productResults">
-        <!-- I prodotti filtrati saranno inseriti dinamicamente qui (si spera)-->
+    <div class="featured-products" id="searchResults">
+        <div id="no-products-message" style="display: none;">Nessun prodotto trovato </div>
         <%
-            List<Product> allProducts = (List<Product>) request.getAttribute("allProducts");
-            for (Product product : allProducts) {
-                String base64Image = null;
-                if (product != null && product.getImage() != null) {
-                    try {
-                        Blob imageBlob = product.getImage();
-                        byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
-                        base64Image = Base64.getEncoder().encodeToString(imageData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            List<Product> productsToDisplay = (searchProducts != null && !searchProducts.isEmpty()) ? searchProducts : allProducts;
+            if (productsToDisplay != null && !productsToDisplay.isEmpty()) {
+                for (Product product : productsToDisplay) {
+                    String base64Image = null;
+                    if (product != null && product.getImage() != null) {
+                        try {
+                            Blob imageBlob = product.getImage();
+                            byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
+                            base64Image = Base64.getEncoder().encodeToString(imageData);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
         %>
-        <div class="product-card">
+        <div class="product-card"
+             data-category="<%= product.getCategoria() %>"
+             data-brand="<%= product.getBrand() %>"
+             data-price="<%= product.getPrezzo() %>">
             <a href="Dispatcher?controllerAction=ProductDetail.view&productid=<%= product.getProductid() %>">
                 <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>">
                 <h3><%= product.getNome() %></h3>
@@ -164,9 +183,11 @@
         </div>
         <%
             }
+        }
         %>
     </div>
 </div>
+
 <footer>
     <div class="footer-content">
         <div class="footer-left">
@@ -188,33 +209,53 @@
 
 <!-- Script per filtraggio dinamico -->
 <script>
-    $(document).ready(function() {
-        function loadProducts() {
-            $.ajax({
-                url: 'Dispatcher?controllerAction=Shop.filterProducts',
-                type: 'POST',
-                data: $('#filterForm').serialize(),
-                success: function(data) {
-                    $('#productResults').html(data);
-                },
-                error: function() {
-                    $('#productResults').html('<p>Errore durante il caricamento dei prodotti</p>');
+    document.addEventListener("DOMContentLoaded", function() {
+        const filterForm = document.getElementById('filterForm');
+        const productResults = document.getElementById('productResults');
+        const productCards = document.querySelectorAll('.product-card');
+        const noProductsMessage = document.getElementById('no-products-message');
+
+        function filterProducts() {
+            const category = filterForm.querySelector('[name="category"]').value;
+            const brand = filterForm.querySelector('[name="brand"]').value;
+            const minPrice = parseFloat(filterForm.querySelector('[name="minPrice"]').value) || 0;
+            const maxPrice = parseFloat(filterForm.querySelector('[name="maxPrice"]').value) || Infinity;
+
+            let visibleCount = 0;
+
+            productCards.forEach(product => {
+                const productCategory = product.getAttribute('data-category');
+                const productBrand = product.getAttribute('data-brand');
+                const productPrice = parseFloat(product.getAttribute('data-price'));
+
+                const categoryMatch = (category === '*' || productCategory === category);
+                const brandMatch = (brand === '*' || productBrand === brand);
+                const priceMatch = (productPrice >= minPrice && productPrice <= maxPrice);
+
+                if (categoryMatch && brandMatch && priceMatch) {
+                    product.style.display = '';
+                    visibleCount++;
+                } else {
+                    product.style.display = 'none';
                 }
             });
+            if (visibleCount === 0) {
+                noProductsMessage.style.display = 'block';
+            } else {
+                noProductsMessage.style.display = 'none';
+            }
         }
+        //Event listener per il form di filtraggio
+        filterForm.addEventListener('change', filterProducts);
 
-        // Applicazione dei filtri al cambiamento di qualsiasi campo
-        $('#filterForm select, #filterForm input').on('change keyup', function() {
-            loadProducts();
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            filterForm.reset();
+            filterProducts();
         });
 
-        // Reset dei filtri
-        $('#resetFilters').on('click', function() {
-            $('#filterForm')[0].reset();
-            loadProducts();
-        });
+        // Filtro iniziale per mostrare tutti i prodotti
+        filterProducts();
     });
 </script>
-
 </body>
 </html>

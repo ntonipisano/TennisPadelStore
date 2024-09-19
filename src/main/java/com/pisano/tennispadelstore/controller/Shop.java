@@ -73,7 +73,7 @@ public class Shop {
         }
     }
 
-    public static void filterProducts(HttpServletRequest request, HttpServletResponse response) {
+    public static void searchProducts(HttpServletRequest request, HttpServletResponse response) {
         DAOFactory sessionDAOFactory = null;
         DAOFactory productDAOFactory = null;
         User loggedUser;
@@ -97,23 +97,25 @@ public class Shop {
             productDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, productFactoryParameters);
             productDAOFactory.beginTransaction();
 
-            String category = request.getParameter("category");
-            String brand = request.getParameter("brand");
-            String minPrice = request.getParameter("minPrice");
-            String maxPrice = request.getParameter("maxPrice");
+            String query = request.getParameter("query");
 
             ProductDAO productDAO = productDAOFactory.getProductDAO();
-            List<Product> filteredProducts = productDAO.findProductsbyFilters(category, brand, minPrice, maxPrice);
+            List<Product> searchProducts = productDAO.findbyName(query);
+
+            if (searchProducts == null) {
+                System.out.println("Filtered products is null");
+            } else {
+                System.out.println("Filtered products size: " + searchProducts.size());
+            }
 
             sessionDAOFactory.commitTransaction();
             productDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
-            request.setAttribute("viewUrl", "shop/view");
-            request.setAttribute("filteredProducts", filteredProducts);
-
-            request.getRequestDispatcher("/WEB-INF/productResults.jsp").forward(request, response);
+            request.setAttribute("allProducts", productDAO.findAllProducts());
+            request.setAttribute("searchProducts", searchProducts);
+            request.setAttribute("viewUrl","shop/view");
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -132,8 +134,6 @@ public class Shop {
             }
         }
     }
-
-
 
 }
 

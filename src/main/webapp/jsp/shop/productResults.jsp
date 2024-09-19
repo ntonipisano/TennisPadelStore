@@ -7,7 +7,8 @@
 <div class="featured-products" id="productResults">
     <%
         List<Product> filteredProducts = (List<Product>) request.getAttribute("filteredProducts");
-        for (Product product : filteredProducts) {
+
+    for (Product product : filteredProducts) {
             String base64Image = null;
             if (product != null && product.getImage() != null) {
                 try {

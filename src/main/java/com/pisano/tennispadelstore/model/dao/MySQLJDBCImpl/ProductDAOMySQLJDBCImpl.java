@@ -134,37 +134,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         return product;
     }
-    /*
-    @Override
-    public Product findByProductId(Long productid) {
-        PreparedStatement ps;
-
-        try {
-            String sql = "SELECT * FROM product WHERE productid = ? AND deleted = 'N'";
-            ps = conn.prepareStatement(sql);
-            ps.setLong(1,productid);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Product product = new Product();
-                    product.setProductid(rs.getLong("productid"));
-                    product.setNome(rs.getString("nome"));
-                    product.setDescrizione(rs.getString("descrizione"));
-                    product.setPrezzo(rs.getString("prezzo"));
-                    product.setCategoria(rs.getString("categoria"));
-                    product.setBrand(rs.getString("brand"));
-                    product.setDisponibilita(rs.getString("disponibilita"));
-                    product.setVetrina(rs.getString("vetrina").equals("S"));
-                    product.setDeleted(rs.getString("deleted").equals("S"));
-                    product.setImage(rs.getBlob("image"));
-                    return product;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-        }
-        */
 
     /*Metodo per filtrare i prodotti in base alla categoria */
     @Override
