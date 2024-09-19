@@ -55,9 +55,8 @@
     </div>
 </nav>
 
-<!-- Sezione per il prodotto -->
-<div class="container">
 
+<div class="container">
     <!-- Link per tornare alla pagina precedente -->
     <div class="back-link">
         <a href="Dispatcher?controllerAction=Shop.view">Torna allo Shop</a>
@@ -75,7 +74,7 @@
             <p><strong>Descrizione </strong> <%= product.getDescrizione() %></p>
             <div class="price"><strong>Prezzo </strong><%= product.getPrezzo() %></div>
 
-            <form action="cart?action=add&productid=<%= product.getProductid() %>" method="post">
+            <form action="Dispatcher?controllerAction=addtoCart&productid=<%= product.getProductid() %>" method="post">
                 <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
             </form>
         </div>

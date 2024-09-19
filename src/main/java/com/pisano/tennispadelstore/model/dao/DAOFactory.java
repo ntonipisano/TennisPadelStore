@@ -24,6 +24,8 @@ public abstract class DAOFactory {
 
     public abstract AdminkeyDAO getAdminkeyDAO();
 
+    public abstract CartDAO getCartDAO();
+
     public static DAOFactory getDAOFactory(String whichFactory, Map factoryParameters) {
 
         if (whichFactory.equals(MYSQLJDBCIMPL)) {

@@ -287,6 +287,22 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return products;
     }
 
+    @Override
+    public String getProductPricebyId(Long productId) {
+        String prezzo = null;
+        String query = "SELECT prezzo FROM product WHERE productid = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setLong(1, productId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+              prezzo = rs.getString("prezzo");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return prezzo.replace("€","").trim();
+    }
+
     Product read(ResultSet rs) {
         Product product = new Product();
         try {

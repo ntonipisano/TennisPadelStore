@@ -26,5 +26,6 @@ public interface ProductDAO {
     public List <Product> findAllProducts();
     public void modDispbyProductid (Long productid, String disponibilita);
     public List<Product> findProductsbyFilters(String category, String brand, String minPrice, String maxPrice);
+    public String getProductPricebyId (Long productId);
 
 }

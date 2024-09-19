@@ -1,14 +1,9 @@
 package com.pisano.tennispadelstore.model.dao.CookieImpl;
 
+import com.pisano.tennispadelstore.model.dao.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
-
-import com.pisano.tennispadelstore.model.dao.DAOFactory;
-import com.pisano.tennispadelstore.model.dao.UserDAO;
-import com.pisano.tennispadelstore.model.dao.ProductDAO;
-import com.pisano.tennispadelstore.model.dao.OrderDAO;
-import com.pisano.tennispadelstore.model.dao.AdminkeyDAO;
 
 public class CookieDAOFactory extends DAOFactory {
 
@@ -44,6 +39,9 @@ public class CookieDAOFactory extends DAOFactory {
 
     @Override
     public UserDAO getUserDAO() { return new UserDAOCookieImpl(request,response); }
+
+    @Override
+    public CartDAO getCartDAO() { return new CartDAOCookieImpl(request,response); }
 
     @Override
     public ProductDAO getProductDAO() {
