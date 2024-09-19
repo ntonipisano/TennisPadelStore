@@ -71,7 +71,6 @@
     <div class="search-bar">
         <form action="Dispatcher" method="post" id="searchForm" name="searchForm">
             <input type="hidden" name="controllerAction" value="Shop.searchProducts"/>
-
             <input type="text" name="query" placeholder="Cerca prodotti...">
             <button type="submit">Cerca</button>
         </form>

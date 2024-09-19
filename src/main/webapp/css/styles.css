@@ -64,6 +64,19 @@ body {
     background-color: #e04820;
 }
 
+.search-bar button.buttons {
+    color: #fff;
+    cursor: pointer;
+    background-color: transparent;
+    text-decoration: none;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 2rem;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-size: 18px;
+}
+
 .navbar-right {
     display: flex;
     align-items: center;

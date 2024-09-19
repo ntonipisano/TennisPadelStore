@@ -33,7 +33,10 @@
     </div>
 
     <div class="search-bar">
-        <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Vai al Negozio</a>
+        <form action="Dispatcher" method="post">
+            <input type="hidden" name="controllerAction" value="Shop.view"/>
+            <button type="submit" class="buttons">Vai allo Shop</button>
+        </form>
     </div>
 
     <div class="navbar-right">
