@@ -5,11 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
-import com.pisano.tennispadelstore.model.dao.DAOFactory;
-import com.pisano.tennispadelstore.model.dao.UserDAO;
-import com.pisano.tennispadelstore.model.dao.OrderDAO;
-import com.pisano.tennispadelstore.model.dao.ProductDAO;
-import com.pisano.tennispadelstore.model.dao.AdminkeyDAO;
+import com.pisano.tennispadelstore.model.dao.*;
 import com.pisano.tennispadelstore.services.config.Configuration;
 public class MySQLJDBCDAOFactory extends DAOFactory {
 
@@ -79,5 +75,5 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
     @Override
     public AdminkeyDAO getAdminkeyDAO() { return new AdminkeyDAOMySQLJDBCImpl(connection);}
 
-    //SCRIVERE ALTRI SE SERVONO ALTRI MODEL
+    public CartDAO getCartDAO() { throw new UnsupportedOperationException("Not supported");}
 }

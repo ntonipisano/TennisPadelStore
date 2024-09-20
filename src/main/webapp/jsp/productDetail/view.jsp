@@ -74,13 +74,18 @@
             <p><strong>Descrizione </strong> <%= product.getDescrizione() %></p>
             <div class="price"><strong>Prezzo </strong><%= product.getPrezzo() %></div>
 
-            <form action="Dispatcher?controllerAction=addtoCart&productid=<%= product.getProductid() %>" method="post">
+            <% if (loggedOn) { %>
+            <form action="Dispatcher" method="post" name="addtoCart">
+            <input type="hidden" name="controllerAction" value="Cart.addtoCart"/>
+            <input type="hidden" name="productId" value=<%= product.getProductid() %>/>
                 <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
             </form>
+            <% } else { %>
+            <a href="Dispatcher?controllerAction=Login.view" style="text-decoration: none">Effettua il Login per acquistare</a>
+            <% } %>
         </div>
         </div>
     </div>
-
 
 <footer>
     <div class="footer-content">

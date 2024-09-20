@@ -35,7 +35,7 @@
         <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
         <button class="buttons">Logout</button>
         <% } %>
-        <a href=Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
+        <a href=Dispatcher?controllerAction=Cart.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>
 </nav>

@@ -17,6 +17,60 @@ public class Cart {
     private Cart() {
     }
 
+    public static void view(HttpServletRequest request, HttpServletResponse response) {
+
+        DAOFactory sessionDAOFactory = null;
+        User loggedUser;
+        DAOFactory cartDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+
+            Map sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            sessionDAOFactory.commitTransaction();
+
+            Map cartFactoryParameters = new HashMap<String, Object>();
+            cartFactoryParameters.put("request", request);
+            cartFactoryParameters.put("response", response);
+            cartDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, cartFactoryParameters);
+            cartDAOFactory.beginTransaction();
+
+            CartDAO cartDAO = cartDAOFactory.getCartDAO();
+            Map cartItems = new HashMap<Long,Integer>();
+            cartItems = cartDAO.getCartItems();
+
+            cartDAOFactory.commitTransaction();
+
+            request.setAttribute("loggedOn", loggedUser != null);
+            request.setAttribute("loggedUser", loggedUser);
+            request.setAttribute("cartItems",cartItems);
+            request.setAttribute("viewUrl", "cart/view");
+
+            }
+         catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+            }
+        }
+    }
+
     public static void addtoCart(HttpServletRequest request, HttpServletResponse response) {
 
         DAOFactory cartDAOFactory = null;
@@ -36,9 +90,6 @@ public class Cart {
             loggedUser = sessionUserDAO.findLoggedUser();
 
             sessionDAOFactory.commitTransaction();
-
-            request.setAttribute("loggedOn", loggedUser != null);
-            request.setAttribute("loggedUser", loggedUser);
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
@@ -64,8 +115,8 @@ public class Cart {
             cartDAOFactory.beginTransaction();
 
             CartDAO cartDAO = cartDAOFactory.getCartDAO();
-
-            String productIdStr = request.getParameter("productid");
+            
+            String productIdStr = request.getParameter("productId");
             int quantity = 1;
 
             try {
@@ -80,6 +131,9 @@ public class Cart {
 
             request.setAttribute("loggedOn", loggedUser != null);
             request.setAttribute("loggedUser", loggedUser);
+            Shop.view(request,response);
+            request.setAttribute("viewUrl", "shop/view");
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
             try {
@@ -95,7 +149,7 @@ public class Cart {
                 logger.log(Level.SEVERE, "Close transaction failed", t);
             }
         }
-
     }
+
 
 }

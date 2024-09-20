@@ -83,7 +83,7 @@
         <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
         <a href="Dispatcher?controllerAction=Login.logout" class="buttons">Logout</a>
         <% } %>
-        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img
+        <a href="Dispatcher?controllerAction=Cart.view" class="buttons"><img
                 src="${pageContext.request.contextPath}/images/carrello.png">
         </a>
     </div>

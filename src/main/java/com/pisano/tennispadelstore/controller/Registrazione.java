@@ -84,15 +84,6 @@ public class Registrazione {
 
             UserDAO userDAO = daoFactory.getUserDAO();
 
-            /* SENZA CONTROLLI
-            userDAO.create(
-                    null,
-                    request.getParameter("username"),
-                    request.getParameter("password"),
-                    request.getParameter("nome"),
-                    request.getParameter("cognome"),
-                    false);
-            */
             //Recupero i parametri dal form
             String username = request.getParameter("username");
             String password = request.getParameter("password");

@@ -19,7 +19,7 @@ public class CartDAOCookieImpl implements CartDAO {
     public CartDAOCookieImpl(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        this.productDAO = productDAO;
+        //this.productDAO = productDAO;
     }
 
     @Override
