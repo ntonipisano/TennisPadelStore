@@ -11,15 +11,14 @@ import java.util.Map;
 
 public class CartDAOCookieImpl implements CartDAO {
     private static final String CART_COOKIE_NAME = "cart";
-    private static final String COOKIE_DELIMITER = ";";
+    private static final String COOKIE_DELIMITER = "#";
     private static final String ITEM_DELIMITER = ":";
     HttpServletRequest request;
     HttpServletResponse response;
-    ProductDAO productDAO;
+
     public CartDAOCookieImpl(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        //this.productDAO = productDAO;
     }
 
     @Override
@@ -78,6 +77,7 @@ public class CartDAOCookieImpl implements CartDAO {
         response.addCookie(cartCookie);
     }
 
+    /*
     @Override
     public String getTotalPrice() {
         double total = 0;  // Usa double per gestire i decimali dei prezzi
@@ -95,6 +95,9 @@ public class CartDAOCookieImpl implements CartDAO {
         }
         return String.format("%.2f", total);  // Formatta il totale a due decimali
     }
+     */
+    @Override
+    public String getTotalPrice() {throw new UnsupportedOperationException("Not supported");}
 
     private void saveCartItems(Map<Long, Integer> cartItems) {
         StringBuilder sb = new StringBuilder();
@@ -106,6 +109,7 @@ public class CartDAOCookieImpl implements CartDAO {
         response.addCookie(cartCookie);
     }
 
+    /*
     private String getProductPrice(Long productId) {
         String total = null;
         Map<Long, Integer> cartItems = getCartItems();
@@ -118,5 +122,7 @@ public class CartDAOCookieImpl implements CartDAO {
         }
         return total;
     }
+     */
+
     }
 

@@ -290,7 +290,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public String getProductPricebyId(Long productId) {
         String prezzo = null;
-        String query = "SELECT prezzo FROM product WHERE productid = ?";
+        String query = "SELECT prezzo FROM product WHERE productid = ? AND deleted ='N'";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setLong(1, productId);
             ResultSet rs = ps.executeQuery();

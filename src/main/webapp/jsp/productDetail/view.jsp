@@ -77,7 +77,7 @@
             <% if (loggedOn) { %>
             <form action="Dispatcher" method="post" name="addtoCart">
             <input type="hidden" name="controllerAction" value="Cart.addtoCart"/>
-            <input type="hidden" name="productId" value=<%= product.getProductid() %>/>
+            <input type="hidden" name="productId" value="<%= product.getProductid() %>"/>
                 <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
             </form>
             <% } else { %>
