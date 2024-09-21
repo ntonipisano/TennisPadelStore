@@ -5,13 +5,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="com.pisano.tennispadelstore.controller.Cart" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Home";
-    List<Product> productsInCart = (List<Product>) request.getAttribute("productsInCart");
 %>
 
 <!DOCTYPE html>
@@ -99,8 +99,8 @@
         }
 
     </style>
-
 </head>
+
 <body>
 <nav class="navbar">
     <div class="navbar-brand">
@@ -148,6 +148,7 @@
             <th>Prodotto</th>
             <th>Prezzo Unitario</th>
             <th>Quantita'</th>
+
         </tr>
         <% for (Map.Entry<Product, Integer> entry : productsAndQuantity.entrySet()) {
             Product product = entry.getKey();
@@ -155,44 +156,77 @@
         %>
         <tr>
             <td><%= product.getNome() %></td>
-            <td><%= product.getPrezzo() %></td>
+            <td class="price" data-prezzo="<%= product.getPrezzo() %>"> <%= product.getPrezzo() %></td>
 
             <td>
-            <form action="Dispatcher" method="post" style="display:inline;">
-                <input type="hidden" name="controllerAction" value="Cart.decreaseQuantity" />
-                <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
-                <button type="submit" class="buttons" style="width: 5px;">-</button>
-            </form>
+                <form action="Dispatcher" method="post" style="display:inline;">
+                    <input type="hidden" name="controllerAction" value="Cart.decreaseQuantity" />
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
+                    <button type="submit" class="buttons" style="width: 5px;">-</button>
+                </form>
 
-            <%= quantity %>
+                <span class="quantity" data-quantita="<%= quantity %>"><%= quantity %></span>
 
-            <form action="Dispatcher" method="post" style="display:inline;">
-                <input type="hidden" name="controllerAction" value="Cart.increaseQuantity" />
-                <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
-                <button type="submit" class="buttons" style="width: 5px;">+</button>
-            </form>
-            <!-- </td>
-            <td> -->
+                <form action="Dispatcher" method="post" style="display:inline;">
+                    <input type="hidden" name="controllerAction" value="Cart.increaseQuantity" />
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
+                    <button type="submit" class="buttons" style="width: 5px;">+</button>
+                </form>
                 <form action="Dispatcher" method="post" style="display:inline;">
                     <input type="hidden" name="controllerAction" value="Cart.removeProduct" />
                     <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
                     <button type="submit" class="buttons">Rimuovi</button>
                 </form>
             </td>
+
         </tr>
         <% } %>
     </table>
+
+    <!-- Totale generale -->
+    <h2>Totale carrello: &euro;<span id="total-price">0.00</span></h2>
+
     <% } else { %>
-    <p>Il carrello è vuoto.</p>
+    <p style="font-size: 20px">Carrello vuoto!</p>
     <% } %>
 
+    <%
+        if (productsAndQuantity != null && !productsAndQuantity.isEmpty()) {
+    %>
 
     <!-- tasto acquista -->
     <form action="Dispatcher" method="post">
         <input type="hidden" name="controllerAction" value="Order.create"/>
         <button type="submit" class="buttons2" style="margin-top: 40px">Effettua l'acquisto</button>
     </form>
-
+    <%
+        }
+    %>
 </div>
+
+    <!-- Script calcolo totale carrello -->
+    <script>
+        function calculateTotal() {
+            let total = 0;
+            const rows = document.querySelectorAll('table tr');
+
+            rows.forEach((row) => {
+                const priceElement = row.querySelector('.price');
+                const quantityElement = row.querySelector('.quantity');
+
+                if (priceElement && quantityElement) {
+                    const price = parseFloat(priceElement.getAttribute('data-prezzo'));
+                    const quantity = parseInt(quantityElement.getAttribute('data-quantita'));
+
+                    if (!isNaN(price) && !isNaN(quantity)) {
+                        total += price * quantity;
+                    }
+                }
+            });
+            document.getElementById('total-price').textContent = total.toFixed(2);
+        }
+        window.onload = calculateTotal;
+    </script>
+
 </body>
 </html>

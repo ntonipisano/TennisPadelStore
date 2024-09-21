@@ -77,28 +77,6 @@ public class CartDAOCookieImpl implements CartDAO {
         response.addCookie(cartCookie);
     }
 
-    /*
-    @Override
-    public String getTotalPrice() {
-        double total = 0;  // Usa double per gestire i decimali dei prezzi
-        Map<Long, Integer> cartItems = getCartItems();
-        for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
-            Long productId = entry.getKey();
-            int quantity = entry.getValue();
-            String price = getProductPrice(productId);
-            try {
-                double priceDouble = Double.parseDouble(price);
-                total += priceDouble * quantity;
-            } catch (NumberFormatException e) {
-                // Log error or handle exception
-            }
-        }
-        return String.format("%.2f", total);  // Formatta il totale a due decimali
-    }
-     */
-    @Override
-    public String getTotalPrice() {throw new UnsupportedOperationException("Not supported");}
-
     private void saveCartItems(Map<Long, Integer> cartItems) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
@@ -109,20 +87,72 @@ public class CartDAOCookieImpl implements CartDAO {
         response.addCookie(cartCookie);
     }
 
-    /*
-    private String getProductPrice(Long productId) {
-        String total = null;
-        Map<Long, Integer> cartItems = getCartItems();
-        for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
-            Long productId2 = entry.getKey();
-            int quantity = entry.getValue();
-            String price = productDAO.getProductPricebyId(productId); // Usa il DAO per ottenere il prezzo
-            int priceok = Integer.parseInt(price);
-            total += priceok * quantity;
+    @Override
+    public void decreaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
+        // Ottieni il carrello dal cookie
+        Map<Long, Integer> cart = getCartFromCookie(request);
+
+        if (cart.containsKey(productId)) {
+            int currentQuantity = cart.get(productId);
+
+            if (currentQuantity > 1) {
+                cart.put(productId, currentQuantity - 1);
+            } else {
+                cart.remove(productId); // Se la quantità è 1, rimuovi il prodotto
+            }
         }
-        return total;
+        updateCartCookie(cart, response);
     }
-     */
+
+    @Override
+    public void increaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
+        Map<Long, Integer> cart = getCartFromCookie(request);
+
+        if (cart.containsKey(productId)) {
+            int currentQuantity = cart.get(productId);
+            cart.put(productId, currentQuantity + 1);
+        } else {
+            cart.put(productId, 1);
+        }
+        updateCartCookie(cart, response);
+    }
+
+    private Map<Long, Integer> getCartFromCookie(HttpServletRequest request) {
+        Map<Long, Integer> cart = new HashMap<>();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("cart".equals(cookie.getName())) {
+                    String[] cartItems = cookie.getValue().split(COOKIE_DELIMITER);
+                    for (String item : cartItems) {
+                        String[] parts = item.split(":");
+                        Long productId = Long.parseLong(parts[0]);
+                        Integer quantity = Integer.parseInt(parts[1]);
+                        cart.put(productId, quantity);
+                    }
+                }
+            }
+        }
+        return cart;
+    }
+    private void updateCartCookie(Map<Long, Integer> cart, HttpServletResponse response) {
+        StringBuilder cartValue = new StringBuilder();
+        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
+            if (cartValue.length() > 0) {
+                cartValue.append(COOKIE_DELIMITER);
+            }
+            cartValue.append(entry.getKey()).append(":").append(entry.getValue());
+        }
+
+        Cookie cartCookie = new Cookie("cart", cartValue.toString());
+        cartCookie.setMaxAge(60 * 60 * 24 * 7);
+        cartCookie.setPath("/");
+        response.addCookie(cartCookie);
+    }
+
+
+
+
 
     }
 
