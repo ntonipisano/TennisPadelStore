@@ -172,11 +172,6 @@
                     <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
                     <button type="submit" class="buttons" style="width: 5px;">+</button>
                 </form>
-                <form action="Dispatcher" method="post" style="display:inline;">
-                    <input type="hidden" name="controllerAction" value="Cart.removeProduct" />
-                    <input type="hidden" name="productId" value="<%= product.getProductid() %>" />
-                    <button type="submit" class="buttons">Rimuovi</button>
-                </form>
             </td>
 
         </tr>

@@ -1,7 +1,6 @@
 package com.pisano.tennispadelstore.model.dao.CookieImpl;
 
 import com.pisano.tennispadelstore.model.dao.CartDAO;
-import com.pisano.tennispadelstore.model.dao.ProductDAO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,13 +24,6 @@ public class CartDAOCookieImpl implements CartDAO {
     public void addProductToCart(Long productId, int quantity) {
         Map<Long, Integer> cartItems = getCartItems();
         cartItems.put(productId, cartItems.getOrDefault(productId, 0) + quantity);
-        saveCartItems(cartItems);
-    }
-
-    @Override
-    public void removeProductFromCart(Long productId) {
-        Map<Long, Integer> cartItems = getCartItems();
-        cartItems.remove(productId);
         saveCartItems(cartItems);
     }
 
@@ -60,23 +52,6 @@ public class CartDAOCookieImpl implements CartDAO {
         return cartItems;
     }
 
-    @Override
-    public void updateProductQuantity(Long productId, int quantity) {
-        Map<Long, Integer> cartItems = getCartItems();
-        if (cartItems.containsKey(productId)) {
-            cartItems.put(productId, quantity);
-            saveCartItems(cartItems);
-        }
-    }
-
-    @Override
-    public void clearCart() {
-        Cookie cartCookie = new Cookie(CART_COOKIE_NAME, "");
-        cartCookie.setMaxAge(0);
-        cartCookie.setPath("/");
-        response.addCookie(cartCookie);
-    }
-
     private void saveCartItems(Map<Long, Integer> cartItems) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
@@ -88,7 +63,7 @@ public class CartDAOCookieImpl implements CartDAO {
     }
 
     @Override
-    public void decreaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
+    public Map <Long,Integer> decreaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
         // Ottieni il carrello dal cookie
         Map<Long, Integer> cart = getCartFromCookie(request);
 
@@ -98,14 +73,15 @@ public class CartDAOCookieImpl implements CartDAO {
             if (currentQuantity > 1) {
                 cart.put(productId, currentQuantity - 1);
             } else {
-                cart.remove(productId); // Se la quantità è 1, rimuovi il prodotto
+                cart.remove(productId); // Se la quantità è 1 rimuovi il prodotto
             }
         }
         updateCartCookie(cart, response);
+        return cart;
     }
 
     @Override
-    public void increaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
+    public Map<Long,Integer> increaseProductQuantity(Long productId, HttpServletRequest request, HttpServletResponse response) {
         Map<Long, Integer> cart = getCartFromCookie(request);
 
         if (cart.containsKey(productId)) {
@@ -115,6 +91,7 @@ public class CartDAOCookieImpl implements CartDAO {
             cart.put(productId, 1);
         }
         updateCartCookie(cart, response);
+        return cart;
     }
 
     private Map<Long, Integer> getCartFromCookie(HttpServletRequest request) {
@@ -126,15 +103,19 @@ public class CartDAOCookieImpl implements CartDAO {
                     String[] cartItems = cookie.getValue().split(COOKIE_DELIMITER);
                     for (String item : cartItems) {
                         String[] parts = item.split(":");
-                        Long productId = Long.parseLong(parts[0]);
-                        Integer quantity = Integer.parseInt(parts[1]);
-                        cart.put(productId, quantity);
+                        try {
+                            Long productId = Long.parseLong(parts[0]);
+                            Integer quantity = Integer.parseInt(parts[1]);
+                            cart.put(productId, quantity);
+                        } catch (NumberFormatException e) {
+                        }
                     }
                 }
             }
         }
         return cart;
     }
+
     private void updateCartCookie(Map<Long, Integer> cart, HttpServletResponse response) {
         StringBuilder cartValue = new StringBuilder();
         for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
@@ -145,14 +126,10 @@ public class CartDAOCookieImpl implements CartDAO {
         }
 
         Cookie cartCookie = new Cookie("cart", cartValue.toString());
-        cartCookie.setMaxAge(60 * 60 * 24 * 7);
+        cartCookie.setMaxAge(60 * 60 * 24);
         cartCookie.setPath("/");
         response.addCookie(cartCookie);
     }
-
-
-
-
 
     }
 
