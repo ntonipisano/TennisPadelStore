@@ -21,114 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis & Padel Store Carrello</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
-
-    <style>
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 1200px;
-        }
-
-        .cart-section, .checkout-section {
-            flex: 1;
-            min-width: 300px;
-            margin: 10px;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .buttons, .buttons2 {
-            background-color: #52a268;
-            color: white;
-            padding: 8px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            display: block;
-            margin: 4px auto;
-            text-align: center;
-            transition: background-color 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .buttons:hover {
-            background-color: #72c783;
-        }
-
-        .buttons2 {
-            background-color: #d97c0e;
-            padding: 12px 15px;
-            font-size: 16px;
-        }
-
-        .buttons2:hover {
-            background-color: #218838;
-        }
-
-        .checkout-section form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .checkout-section label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .checkout-section input, .checkout-section select {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .payment-method {
-            margin-bottom: 15px;
-        }
-
-        .payment-method input {
-            margin-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/cart.css">
 </head>
 
 <body>
@@ -216,27 +109,28 @@
     <div class="checkout-section">
         <% if (productsAndQuantity != null && !productsAndQuantity.isEmpty()) { %>
         <h2>Dati di Spedizione</h2>
-        <form action="Dispatcher" method="post">
+        <form action="Dispatcher" method="post" id="checkout-form" onsubmit="updateTotalPrice()">
             <input type="hidden" name="controllerAction" value="Order.create"/>
+            <input type="hidden" name="costototale" id="totalPrice"/>
 
             <!-- Campi per i dati di spedizione -->
-            <label for="nome">Nome e Cognome:</label>
-            <input type="text" id="nome" name="nome" required />
+            <label for="nome">Nome e Cognome</label>
+            <input type="text" id="nome" name="nome" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required/>
 
-            <label for="indirizzo">Indirizzo:</label>
-            <input type="text" id="indirizzo" name="indirizzo" required />
+            <label for="indirizzo">Indirizzo</label>
+            <input type="text" id="indirizzo" name="indirizzo" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required/>
 
-            <label for="citta">Citta':</label>
-            <input type="text" id="citta" name="citta" required />
+            <label for="citta">Citta'</label>
+            <input type="text" id="citta" name="citta" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required />
 
-            <label for="cap">CAP:</label>
-            <input type="text" id="cap" name="cap" required />
+            <label for="cap">CAP</label>
+            <input type="text" id="cap" name="cap" pattern="\d{5}" title="Inserisci un cap valido" required />
 
-            <label for="provincia">Provincia:</label>
-            <input type="text" id="provincia" name="provincia" required />
+            <label for="provincia">Provincia</label>
+            <input type="text" id="provincia" name="provincia" pattern="[A-Za-z]{2}" title="Inserisci la sigla di una provincia (2 caratteri)" required />
 
-            <label for="cell">Cellulare:</label>
-            <input type="text" id="cell" name="cell" required />
+            <label for="cell">Cellulare</label>
+            <input type="text" id="cell" name="cell" pattern="\d{10}" title="Inserisci un numero di telefono italiano (10 cifre)" required />
 
             <!-- Sezione Metodo di Pagamento -->
             <h2>Metodo di Pagamento</h2>
@@ -276,39 +170,13 @@
             }
         });
         document.getElementById('total-price').textContent = total.toFixed(2);
+        document.getElementById('totalPrice').textContent = total.toFixed(2);
     }
     window.onload = calculateTotal;
 
-    //Verifica informazioni ordine
-    function validateForm() {
-        let valid = true;
 
-        //Reset error messages
-        document.querySelectorAll('.error-message').forEach(elem => elem.textContent = '');
 
-        // Validazione CAP
-        const cap = document.getElementById('cap').value;
-        if (!/^\d{5}$/.test(cap)) {
-            document.getElementById('cap-error').textContent = 'CAP deve essere un numero di 5 cifre.';
-            valid = false;
-        }
-
-        // Validazione Provincia
-        const provincia = document.getElementById('provincia').value;
-        if (!/^[A-Za-z]{2}$/.test(provincia)) {
-            document.getElementById('provincia-error').textContent = 'Provincia deve essere composta da 2 lettere.';
-            valid = false;
-        }
-
-        // Validazione Cellulare
-        const cellulare = document.getElementById('cell').value;
-        if (!/^\d+$/.test(cellulare)) {
-            document.getElementById('cellulare-error').textContent = 'Cellulare deve contenere solo numeri.';
-            valid = false;
-        }
-        return valid;
-    }
-</script>
+    </script>
 
 </body>
 </html>
