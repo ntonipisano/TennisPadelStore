@@ -51,6 +51,7 @@
     </div>
 </nav>
 
+<main>
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
 <div class="alert">
@@ -96,6 +97,7 @@
     <p class="shop-description">Tutto il necessario per il tennis e il padel: racchette, scarpe, abbigliamento e molto altro.</p>
     <a href="Dispatcher?controllerAction=Shop.view" class="shop-button">Visita il nostro Shop Online</a>
 </div>
+</main>
 
 <!-- Footer -->
 <footer>
