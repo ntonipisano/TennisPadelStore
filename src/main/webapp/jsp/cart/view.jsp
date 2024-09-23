@@ -110,18 +110,18 @@
         <% if (productsAndQuantity != null && !productsAndQuantity.isEmpty()) { %>
         <h2>Dati di Spedizione</h2>
         <form action="Dispatcher" method="post" id="checkout-form" onsubmit="updateTotalPrice()">
-            <input type="hidden" name="controllerAction" value="Order.create"/>
+            <input type="hidden" name="controllerAction" value="OrderController.createOrder"/>
             <input type="hidden" name="costototale" id="totalPrice"/>
 
             <!-- Campi per i dati di spedizione -->
             <label for="nome">Nome e Cognome</label>
-            <input type="text" id="nome" name="nome" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required/>
+            <input type="text" id="nome" name="nome" pattern="[A-Za-z\s]+" title="Inserisci: nome spazio cognome" required/>
 
-            <label for="indirizzo">Indirizzo</label>
-            <input type="text" id="indirizzo" name="indirizzo" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required/>
+            <label for="indirizzo">Indirizzo e civico</label>
+            <input type="text" id="indirizzo" name="indirizzo" pattern="[A-Za-z0-9\s]+" title="Inserisci un indirizzo valido" required/>
 
             <label for="citta">Citta'</label>
-            <input type="text" id="citta" name="citta" pattern="[A-Za-z]+" title="Solo lettere sono ammesse" required />
+            <input type="text" id="citta" name="citta" pattern="[A-Za-z\s]+" title="Solo lettere sono ammesse" required />
 
             <label for="cap">CAP</label>
             <input type="text" id="cap" name="cap" pattern="\d{5}" title="Inserisci un cap valido" required />
@@ -173,8 +173,6 @@
         document.getElementById('totalPrice').textContent = total.toFixed(2);
     }
     window.onload = calculateTotal;
-
-
 
     </script>
 

@@ -8,6 +8,9 @@ public class Order {
     private String stato;
     private String indirizzo;
     private String dataordine;
+    private String metododipagamento;
+    private String cap;
+    private String cellulare;
     private boolean deleted;
 
     public Long getOrderId() {
@@ -51,6 +54,15 @@ public class Order {
     public void setDataordine(String dataordine) {
         this.dataordine = dataordine;
     }
+
+    public String getMetododipagamento() {return metododipagamento;}
+    public void setMetododipagamento (String metododipagamento) {this.metododipagamento = metododipagamento;}
+
+    public String getCap() { return cap;}
+    public void setCap (String cap) {this.cap=cap;}
+
+    public String getCellulare() {return cellulare;}
+    public void setCellulare(String cellulare) {this.cellulare=cellulare;}
 
     public boolean isDeleted() {
         return deleted;

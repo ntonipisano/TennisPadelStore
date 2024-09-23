@@ -1,9 +1,6 @@
 package com.pisano.tennispadelstore.model.dao.MySQLJDBCImpl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,7 +9,6 @@ import com.pisano.tennispadelstore.model.mo.Order;
 import com.pisano.tennispadelstore.model.mo.Product;
 
 public class OrderDAOMySQLJDBCImpl implements OrderDAO {
-
     Connection conn;
     public OrderDAOMySQLJDBCImpl(Connection conn) {
         this.conn = conn;
@@ -20,30 +16,46 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
 
     /*Metodo per salvare un ordine sul db*/
     @Override
-    public Order create(Long orderid, Long userid, String costo, String stato, String indirizzo, String dataordine) {
+    public Order create(Long userid, String costo, String stato, String indirizzo, String dataordine, String metododipagamento, String cap, String cellulare) {
 
         Order order = new Order();
-        order.setOrderId(orderid);
         order.setUserId(userid);
         order.setCosto(costo);
         order.setStato(stato);
         order.setIndirizzo(indirizzo);
         order.setDataordine(dataordine);
+        order.setMetododipagamento(metododipagamento);
+        order.setCap(cap);
+        order.setCellulare(cellulare);
         order.setDeleted(false);
 
+        PreparedStatement ps;
+
         try {
-            String sql = "INSERT INTO `order` (orderid, userid, costo, stato, indirizzo, dataordine, deleted) VALUES (?, ?, ?, ?, ?, ?, 'N')";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setLong(1, orderid);
-            ps.setLong(2, userid);
-            ps.setString(3, costo);
-            ps.setString(4, stato);
-            ps.setString(5, indirizzo);
-            ps.setString(6, dataordine);
+            String sql = "INSERT INTO `order` (userid, costo, stato, indirizzo, dataordine, metododipagamento, cap, cellulare, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'N')";
+            // Usa RETURN_GENERATED_KEYS per ottenere l'ID generato dal database
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setLong(1, userid);
+            ps.setString(2, costo);
+            ps.setString(3, stato);
+            ps.setString(4, indirizzo);
+            ps.setString(5, dataordine);
+            ps.setString(6,metododipagamento);
+            ps.setString(7,cap);
+            ps.setString(8,cellulare);
+
             ps.executeUpdate();
 
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                order.setOrderId(generatedKeys.getLong(1));
+            } else {
+                throw new SQLException("Creating product failed, no ID obtained.");
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return order;
     }
@@ -52,13 +64,16 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
     @Override
     public void update(Order order) {
         try {
-            String sql = "UPDATE `order` SET costo = ?, stato = ?, indirizzo = ?, dataordine = ?, deleted = 'N' WHERE orderid = ?";
+            String sql = "UPDATE `order` SET costo = ?, stato = ?, indirizzo = ?, dataordine = ?, metododipagamento = ?, cap = ?, cellulare = ?, deleted = 'N' WHERE orderid = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, order.getCosto());
             ps.setString(2, order.getStato());
             ps.setString(3, order.getIndirizzo());
             ps.setString(4, order.getDataordine());
-            ps.setLong(5, order.getOrderId());
+            ps.setString(5,order.getMetododipagamento());
+            ps.setString(6,order.getCap());
+            ps.setString(7,order.getCellulare());
+            ps.setLong(8, order.getOrderId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -171,6 +186,18 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         }
         try {
             order.setDataordine(rs.getString("dataordine"));
+        } catch (SQLException sqle) {
+        }
+        try {
+            order.setMetododipagamento(rs.getString("metododipagamento"));
+        } catch (SQLException sqle) {
+        }
+        try {
+            order.setCap(rs.getString("cap"));
+        } catch (SQLException sqle) {
+        }
+        try {
+            order.setCellulare(rs.getString("cellulare"));
         } catch (SQLException sqle) {
         }
         try {

@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface OrderDAO {
     public Order create(
-            Long orderid,
             Long userid,
             String costo,
             String stato,
             String indirizzo,
-            String dataordine);
+            String dataordine,
+            String metododipagamento,
+            String cap,
+            String cellulare);
 
     public void update(Order order);
 

@@ -9,6 +9,8 @@ import com.pisano.tennispadelstore.services.logservice.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -22,6 +24,7 @@ public class OrderController {
 
     public static void createOrder(HttpServletRequest request, HttpServletResponse response) {
 
+        Logger logger = LogService.getApplicationLogger();
         DAOFactory sessionDAOFactory = null;
         User loggedUser;
         DAOFactory cartDAOFactory = null;
@@ -31,6 +34,9 @@ public class OrderController {
         List<Product> unavailableProducts = new ArrayList<>();
         String costo = request.getParameter("costototale");
         String indirizzo = request.getParameter("indirizzo");
+        String metododipagamento = request.getParameter("metodoPagamento");
+        String cap = request.getParameter("cap");
+        String cellulare = request.getParameter("cell");
 
         try {
             Map sessionFactoryParameters = new HashMap<String, Object>();
@@ -79,43 +85,75 @@ public class OrderController {
 
             productDAOFactory.commitTransaction();
 
-        // Controlla disponibilità dei prodotti
-        for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
-            Long productId = entry.getKey();
-            Integer quantity = entry.getValue();
+            // Controlla disponibilità dei prodotti
+            for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
+                Long productId = entry.getKey();
+                Integer quantity = entry.getValue();
 
-            Product product = productDAO.findByProductId(productId); // recupera il prodotto
-            String dispString = product.getDisponibilita();
-            Integer disponibilita = Integer.parseInt(dispString);
-            if (product == null || disponibilita < quantity) {
-                allAvailable = false;
-                unavailableProducts.add(product);
+                Product product = productDAO.findByProductId(productId); // recupera il prodotto
+                String dispString = product.getDisponibilita();
+                Integer disponibilita = Integer.parseInt(dispString);
+                if (product == null || disponibilita < quantity) {
+                    allAvailable = false;
+                    unavailableProducts.add(product);
+                }
             }
-        }
 
-        if (allAvailable) {
-            // Crea l'ordine
-            //Order order = new Order();
-            //order.setUserId(loggedUser.getUserId());
-            // Imposta altri dettagli dell'ordine (costo, indirizzo, ecc.)
+            if (allAvailable) {
+                // Crea l'ordine
+                //Order order = new Order();
+                //order.setUserId(loggedUser.getUserId());
+                // Imposta altri dettagli dell'ordine (costo, indirizzo, ecc.)
 
-            Map orderFactoryParameters = new HashMap<String, Object>();
-            orderFactoryParameters.put("request", request);
-            orderFactoryParameters.put("response", response);
-            orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, orderFactoryParameters);
-            orderDAOFactory.beginTransaction();
+                Map orderFactoryParameters = new HashMap<String, Object>();
+                orderFactoryParameters.put("request", request);
+                orderFactoryParameters.put("response", response);
+                orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, orderFactoryParameters);
+                orderDAOFactory.beginTransaction();
 
-            OrderDAO orderDAO = orderDAOFactory.getOrderDAO();
+                OrderDAO orderDAO = orderDAOFactory.getOrderDAO();
 
-            orderDAO.create(null,loggedUser,costo,"Preso in carico",indirizzo,); // Usa il DAO per creare l'ordine
+                //Ricavo la data corrente dalla classe localdate per passarla alla creazione dell'ordine
+                LocalDate dataCorrente = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String dataFormattata = dataCorrente.format(formatter);
+                //Ricavo lo userid dal loggeduser da passare all'ordine
+                Long userid = loggedUser.getUserId();
 
-            // Redirect alla pagina di conferma
-            response.sendRedirect("confirmationPage.jsp");
-        } else {
-            // Passa l'elenco dei prodotti non disponibili alla pagina di errore
-            request.setAttribute("unavailableProducts", unavailableProducts);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("unavailablePage.jsp");
-            dispatcher.forward(request, response);
+                Order order = orderDAO.create(userid, costo, "Preso in carico", indirizzo, dataFormattata, metododipagamento, cap, cellulare);
+
+                orderDAOFactory.commitTransaction();
+
+                request.setAttribute("loggedOn", loggedUser != null);
+                request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("viewUrl","cart/confirmationPage");
+            } else {
+                // Passa l'elenco dei prodotti non disponibili alla pagina di errore
+                request.setAttribute("unavailableProducts", unavailableProducts);
+                request.setAttribute("loggedOn", loggedUser != null);
+                request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("viewUrl","cart/errorPage");
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
+                if (cartDAOFactory != null) cartDAOFactory.rollbackTransaction();
+                if (productDAOFactory != null) productDAOFactory.rollbackTransaction();
+                if (orderDAOFactory != null) orderDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
+                if (cartDAOFactory != null) cartDAOFactory.closeTransaction();
+                if (productDAOFactory != null) productDAOFactory.closeTransaction();
+                if (orderDAOFactory != null) orderDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+            }
         }
     }
 
