@@ -11,6 +11,9 @@ public class Order {
     private String metododipagamento;
     private String cap;
     private String cellulare;
+    private String nomecognome;
+    private String provincia;
+    private String citta;
     private boolean deleted;
 
     public Long getOrderId() {
@@ -64,6 +67,14 @@ public class Order {
     public String getCellulare() {return cellulare;}
     public void setCellulare(String cellulare) {this.cellulare=cellulare;}
 
+    public String getNomecognome() {return nomecognome;}
+    public void setNomecognome (String nomecognome) {this.nomecognome=nomecognome;}
+
+    public String getProvincia() {return provincia;}
+    public void setProvincia (String provincia) {this.provincia=provincia;}
+
+    public String getCitta () {return citta;}
+    public void setCitta (String citta) {this.citta=citta;}
     public boolean isDeleted() {
         return deleted;
     }

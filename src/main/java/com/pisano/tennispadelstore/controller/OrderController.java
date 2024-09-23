@@ -37,6 +37,9 @@ public class OrderController {
         String metododipagamento = request.getParameter("metodoPagamento");
         String cap = request.getParameter("cap");
         String cellulare = request.getParameter("cell");
+        String nomecognome = request.getParameter("nome");
+        String provincia = request.getParameter("provincia");
+        String citta = request.getParameter("citta");
 
         try {
             Map sessionFactoryParameters = new HashMap<String, Object>();
@@ -118,7 +121,7 @@ public class OrderController {
                 Long userid = loggedUser.getUserId();
 
                 //Creo l'ordine
-                Order order = orderDAO.create(userid, costo, "Preso in carico", indirizzo, dataFormattata, metododipagamento, cap, cellulare);
+                Order order = orderDAO.create(userid, costo, "Preso in carico", indirizzo, dataFormattata, metododipagamento, cap, cellulare, nomecognome, provincia, citta);
                 Long orderidlong = order.getOrderId();
                 String orderid = String.valueOf(orderidlong);
 

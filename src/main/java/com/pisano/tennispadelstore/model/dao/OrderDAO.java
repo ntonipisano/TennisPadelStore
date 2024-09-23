@@ -13,13 +13,16 @@ public interface OrderDAO {
             String dataordine,
             String metododipagamento,
             String cap,
-            String cellulare);
+            String cellulare,
+            String nomecognome,
+            String provincia,
+            String citta);
 
     public void update(Order order);
 
-    public void delete(Order order);
+    public void delete(Order orderid);
 
-    public Order findByOrderId(Order order);
+    public Order findByOrderId(Long order);
 
     public List<Order> findByUserid (Long userid);
 

@@ -617,5 +617,56 @@ public class Management {
     }
 
 
+    //Modifica stato ordine
+    public static void changeOrderState(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory orderDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            Map orderFactoryParameters = new HashMap<String, Object>();
+            orderFactoryParameters.put("request", request);
+            orderFactoryParameters.put("response", response);
+            orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, orderFactoryParameters);
+            orderDAOFactory.beginTransaction();
+
+            //Ricevo i parametri dalla request
+            Long OrderId = Long.parseLong(request.getParameter("OrderId"));
+            String newstate = request.getParameter("newState");
+
+            OrderDAO orderDAO = orderDAOFactory.getOrderDAO();
+            orderDAO.modStatobyOrderid(OrderId,newstate);
+
+            orderDAOFactory.commitTransaction();
+
+            Management.ordermanag(request, response);
+            request.setAttribute("viewUrl","management/ordermanag");
+
+            /*Includo nella risposta uno script per ricaricare la pagina e quindi vedere subito l'aggiornamento*/
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<script type='text/javascript'>");
+            out.println("window.location.href = 'Dispatcher?controllerAction=Management.ordermanag';");
+            out.println("</script>");
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (orderDAOFactory != null) orderDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Rollback Error", t);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (orderDAOFactory != null) orderDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Close Transaction Error", t);
+            }
+        }
+    }
+
+
 
     }
