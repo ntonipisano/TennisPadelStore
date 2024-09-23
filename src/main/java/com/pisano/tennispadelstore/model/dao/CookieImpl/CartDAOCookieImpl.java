@@ -126,7 +126,7 @@ public class CartDAOCookieImpl implements CartDAO {
         }
 
         Cookie cartCookie = new Cookie("cart", cartValue.toString());
-        cartCookie.setMaxAge(60 * 60 * 24);
+        cartCookie.setMaxAge(60 * 60);
         cartCookie.setPath("/");
         response.addCookie(cartCookie);
     }

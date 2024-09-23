@@ -94,7 +94,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps.setString(4, user.getCognome());
             ps.setBoolean(5, user.isAdmin());
             ps.setLong(6, user.getUserId());
-            //Setto deleted a N per update
 
             ps.executeUpdate();
         }
@@ -131,32 +130,13 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = read(rs);
-                    /*
-                    User user = new User();
-                    user.setUserId(rs.getLong("userid"));
-                    user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
-                    user.setNome(rs.getString("nome"));
-                    user.setCognome(rs.getString("cognome"));
-                    user.setAdmin(rs.getString("admin").equals("S"));
-                    user.setDeleted(rs.getString("deleted").equals("S"));
-                    return user;
-                     */
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return user; // Restituisce null se non viene trovato nessun utente
+        return user;
     }
-
-    /*
-    public User findLoggedUser() {
-        Long loggedInUserId = return findByUserId(loggedInUserId);
-    }
-    Qui loggedInUserId deve essere un token o una variabile di sessione
-    Lo implementerò più in là quando mi servirà
-    */
 
     /*Metodo per trovare i dati di un utente nel db a partire dal suo username */
     public User findByUsername(String username) {
@@ -188,7 +168,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     }
 
     //Implemento come metodo privato direttamente qui updateAdminStatus per motivi di sicurezza
-    //Essendo privato non potevo dichiararlo nell'interfaccia UserDAO senza implementarlo
     private void updateAdminStatus(Long userId, String adminStatus) {
         String sql = "UPDATE user SET admin = ? WHERE userid = ?";
 
@@ -255,7 +234,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     }
 
     User read(ResultSet rs) {
-
         User user = new User();
         try {
             user.setUserId(rs.getLong("userid"));

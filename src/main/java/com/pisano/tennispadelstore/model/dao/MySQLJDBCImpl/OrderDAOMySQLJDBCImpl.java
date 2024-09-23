@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import com.pisano.tennispadelstore.model.dao.OrderDAO;
 import com.pisano.tennispadelstore.model.mo.Order;
-import com.pisano.tennispadelstore.model.mo.Product;
 
 public class OrderDAOMySQLJDBCImpl implements OrderDAO {
     Connection conn;
@@ -159,6 +158,7 @@ public class OrderDAOMySQLJDBCImpl implements OrderDAO {
         }
     }
 
+    /*Metodo per vedere tutti gli ordini*/
     @Override
     public List <Order> findAllOrders() {
         List<Order> orders = new ArrayList<>();
