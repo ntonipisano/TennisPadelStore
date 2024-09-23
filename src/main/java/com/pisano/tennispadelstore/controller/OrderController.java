@@ -83,7 +83,7 @@ public class OrderController {
                 }
             }
 
-            productDAOFactory.commitTransaction();
+
 
             // Controlla disponibilità dei prodotti
             for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
@@ -101,9 +101,6 @@ public class OrderController {
 
             if (allAvailable) {
                 // Crea l'ordine
-                //Order order = new Order();
-                //order.setUserId(loggedUser.getUserId());
-                // Imposta altri dettagli dell'ordine (costo, indirizzo, ecc.)
 
                 Map orderFactoryParameters = new HashMap<String, Object>();
                 orderFactoryParameters.put("request", request);
@@ -120,8 +117,21 @@ public class OrderController {
                 //Ricavo lo userid dal loggeduser da passare all'ordine
                 Long userid = loggedUser.getUserId();
 
+                //Creo l'ordine
                 Order order = orderDAO.create(userid, costo, "Preso in carico", indirizzo, dataFormattata, metododipagamento, cap, cellulare);
 
+                //Aggiorno la disponibilità dei prodotti nel database
+                for (Map.Entry<Product, Integer> entry : productsAndQuantity.entrySet()) {
+                    Product product = entry.getKey();
+                    Integer quantity = entry.getValue();
+                    Integer currentDisponibilita = Integer.parseInt(product.getDisponibilita());
+                    Integer nuovaDisponibilita = currentDisponibilita - quantity;
+
+                    // Aggiorna la disponibilità nel database
+                    productDAO.modDispbyProductid(product.getProductid(), String.valueOf(nuovaDisponibilita));
+                }
+
+                productDAOFactory.commitTransaction();
                 orderDAOFactory.commitTransaction();
 
                 request.setAttribute("loggedOn", loggedUser != null);

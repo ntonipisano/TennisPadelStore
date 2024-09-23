@@ -200,7 +200,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Puoi aggiungere un'eccezione custom o un log per gestire l'errore in modo più specifico
         }
     }
 
