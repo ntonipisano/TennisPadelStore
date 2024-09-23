@@ -32,7 +32,7 @@ public class OrderController {
         DAOFactory orderDAOFactory = null;
         boolean allAvailable = true;
         List<Product> unavailableProducts = new ArrayList<>();
-        String costo = request.getParameter("costototale");
+        String costo = request.getParameter("totalPrice");
         String indirizzo = request.getParameter("indirizzo");
         String metododipagamento = request.getParameter("metodoPagamento");
         String cap = request.getParameter("cap");
@@ -119,6 +119,8 @@ public class OrderController {
 
                 //Creo l'ordine
                 Order order = orderDAO.create(userid, costo, "Preso in carico", indirizzo, dataFormattata, metododipagamento, cap, cellulare);
+                Long orderidlong = order.getOrderId();
+                String orderid = String.valueOf(orderidlong);
 
                 //Aggiorno la disponibilità dei prodotti nel database
                 for (Map.Entry<Product, Integer> entry : productsAndQuantity.entrySet()) {
@@ -136,6 +138,7 @@ public class OrderController {
 
                 request.setAttribute("loggedOn", loggedUser != null);
                 request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("orderid",orderid);
                 request.setAttribute("viewUrl","cart/confirmationPage");
             } else {
                 // Passa l'elenco dei prodotti non disponibili alla pagina di errore

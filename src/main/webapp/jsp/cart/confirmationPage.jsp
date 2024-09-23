@@ -4,6 +4,7 @@
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
+    String orderid = (String) request.getAttribute("orderid");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Home";
 %>
@@ -54,7 +55,8 @@
 <div class="container">
     <h1> Ordine confermato! </h1>
     <h2> Abbiamo ricevuto il tuo ordine</h2>
-    <h3>Appena sara' spedito riceverai un SMS al numero di cellulare indicato</h3>
+    <h3>Appena sara' spedito riceverai un SMS al numero di cellulare indicato con la data di consegna stimata</h3>
+    <h4>Numero ordine: <%=orderid%> </h4>
     <span> Grazie per aver scelto Tennis & Padel Store! </span>
 </div>
 </body>

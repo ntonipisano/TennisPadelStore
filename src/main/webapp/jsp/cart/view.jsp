@@ -111,7 +111,7 @@
         <h2>Dati di Spedizione</h2>
         <form action="Dispatcher" method="post" id="checkout-form" onsubmit="updateTotalPrice()">
             <input type="hidden" name="controllerAction" value="OrderController.createOrder"/>
-            <input type="hidden" name="costototale" id="totalPrice"/>
+
 
             <!-- Campi per i dati di spedizione -->
             <label for="nome">Nome e Cognome</label>
@@ -144,6 +144,7 @@
             </div>
 
             <!-- Tasto Acquista -->
+            <input type="hidden" name="totalPrice" id="totalPrice"/>
             <button type="submit" class="buttons2">Effettua l'acquisto</button>
         </form>
         <% } %>
@@ -164,13 +165,15 @@
                 const price = parseFloat(priceElement.getAttribute('data-prezzo'));
                 const quantity = parseInt(quantityElement.getAttribute('data-quantita'));
 
+                //Verifico se sono dei numeri
                 if (!isNaN(price) && !isNaN(quantity)) {
                     total += price * quantity;
                 }
             }
         });
         document.getElementById('total-price').textContent = total.toFixed(2);
-        document.getElementById('totalPrice').textContent = total.toFixed(2);
+        const totalPriceInput = document.getElementById('totalPrice');
+        totalPriceInput.value = total.toFixed(2);
     }
     window.onload = calculateTotal;
 
