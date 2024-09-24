@@ -50,43 +50,44 @@
         <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
         <a href="Dispatcher?controllerAction=Login.logout" class="buttons">Logout</a>
         <% } %>
-        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">
-        </a>
+        <a href="Dispatcher?controllerAction=Carrello.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png"></a>
     </div>
 </nav>
 
 <main>
-<div class="container">
-    <!-- Link per tornare alla pagina precedente -->
-    <div class="back-link">
-        <a href="Dispatcher?controllerAction=Shop.view">Torna allo Shop</a>
-    </div>
-
-    <div class="product-detail">
-        <div class="product-image">
-            <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>" />
+    <div class="container">
+        <!-- Link per tornare alla pagina precedente -->
+        <div class="back-link">
+            <a href="Dispatcher?controllerAction=Shop.view">Torna allo Shop</a>
         </div>
 
-        <div class="product-info">
-            <h1> <strong> <%= product.getNome() %></strong></h1>
-            <p><strong>Brand </strong> <%= product.getBrand() %></p>
-            <p><strong>Categoria </strong> <%= product.getCategoria() %></p>
-            <p><strong>Descrizione </strong> <%= product.getDescrizione() %></p>
-            <div class="price"><strong>Prezzo </strong><%= product.getPrezzo() %></div>
+        <!-- Articolo -->
+        <article class="product-detail">
+            <div class="product-image">
+                <img src="data:image/jpeg;base64,<%= base64Image %>" alt="<%= product.getNome() %>" />
+            </div>
 
-            <% if (loggedOn) { %>
-            <form action="Dispatcher" method="post" name="addtoCart">
-            <input type="hidden" name="controllerAction" value="Cart.addtoCart"/>
-            <input type="hidden" name="productId" value="<%= product.getProductid() %>"/>
-                <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
-            </form>
-            <% } else { %>
-            <a href="Dispatcher?controllerAction=Login.view" style="text-decoration: none">Effettua il Login per acquistare</a>
-            <% } %>
-        </div>
-        </div>
+            <div class="product-info">
+                <h1><strong><%= product.getNome() %></strong></h1>
+                <p><strong>Brand: </strong><%= product.getBrand() %></p>
+                <p><strong>Categoria: </strong><%= product.getCategoria() %></p>
+                <p><strong>Descrizione: </strong><%= product.getDescrizione() %></p>
+                <div class="price"><strong>Prezzo: </strong><%= product.getPrezzo() %></div>
+
+                <% if (loggedOn) { %>
+                <form action="Dispatcher" method="post" name="addtoCart">
+                    <input type="hidden" name="controllerAction" value="Cart.addtoCart"/>
+                    <input type="hidden" name="productId" value="<%= product.getProductid() %>"/>
+                    <button type="submit" class="add-to-cart-btn">Aggiungi al Carrello</button>
+                </form>
+                <% } else { %>
+                <a href="Dispatcher?controllerAction=Login.view" style="text-decoration: none">Effettua il Login per acquistare</a>
+                <% } %>
+            </div>
+        </article>
     </div>
 </main>
+
 <footer>
     <div class="footer-content">
         <div class="footer-left">
