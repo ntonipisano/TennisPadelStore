@@ -88,7 +88,7 @@
         </a>
     </div>
 </nav>
-
+<main>
 <!--Filtri Shop -->
 <nav class="navbar">
 <div class="filter-navbar">
@@ -100,9 +100,11 @@
             <select id="category" name="category" style="font-family: 'Inter', sans-serif">
                 <option value="*">Tutte</option>
                 <option value="Racchette">Racchette</option>
-                <option value="Scarpe">Scarpe</option>
+                <option value="Palline">Palline</option>
+                <option value="Grip">Grip</option>
                 <option value="Abbigliamento">Abbigliamento</option>
                 <option value="Accessori">Accessori</option>
+                <option value="Borsa">Borsa</option>
             </select>
 
         <!-- Opzioni per brand -->
@@ -116,7 +118,7 @@
                 <option value="Head">Head</option>
                 <option value="Lacoste">Lacoste</option>
                 <option value="Bullpadel">Bullpadel</option>
-                <option value="Asics">Asics</option>
+                <option value="Dunlop">Dunlop</option>
             </select>
 
             <!-- Opzioni prezzo -->
@@ -186,7 +188,7 @@
         %>
     </div>
 </div>
-
+</main>
 <footer>
     <div class="footer-content">
         <div class="footer-left">
@@ -246,13 +248,10 @@
         }
         //Event listener per il form di filtraggio
         filterForm.addEventListener('change', filterProducts);
-
         document.getElementById('resetFilters').addEventListener('click', function() {
             filterForm.reset();
             filterProducts();
         });
-
-        // Filtro iniziale per mostrare tutti i prodotti
         filterProducts();
     });
 </script>

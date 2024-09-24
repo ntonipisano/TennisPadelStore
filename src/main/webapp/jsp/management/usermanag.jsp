@@ -39,7 +39,7 @@
 <div class="back-link">
     <a href="Dispatcher?controllerAction=Management.view">Torna indietro</a>
 </div>
-
+<main>
 <div class="user-management">
     <table class="table-wide">
         <thead>
@@ -83,5 +83,6 @@
         </tbody>
     </table>
 </div>
+</main>
 </body>
 </html>

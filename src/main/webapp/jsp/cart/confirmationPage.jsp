@@ -44,14 +44,13 @@
         </a>
     </div>
 </nav>
-
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
 <div class="alert">
     <%= applicationMessage %>
 </div>
 <% } %>
-
+<main>
 <div class="container">
     <h1> Ordine confermato! </h1>
     <h2> Abbiamo ricevuto il tuo ordine</h2>
@@ -59,5 +58,6 @@
     <h4>Numero ordine: <%=orderid%> </h4>
     <span> Grazie per aver scelto Tennis & Padel Store! </span>
 </div>
+</main>
 </body>
 </html>

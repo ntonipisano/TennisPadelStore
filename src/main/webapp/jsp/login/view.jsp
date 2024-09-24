@@ -39,7 +39,7 @@
         </a>
     </div>
 </nav>
-
+<main>
 <div class="container">
     <h1>Login</h1>
     <form id="loginForm" name="loginForm" action="Dispatcher" method="post">
@@ -80,6 +80,7 @@
     <% } %>
 
 </div>
+</main>
 <script>
     document.getElementById('adminToggle').addEventListener('click', function() {
         var adminFields = document.getElementById('adminFields');

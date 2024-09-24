@@ -34,7 +34,7 @@
         <% } %>
     </div>
 </nav>
-
+<main>
 <div class="admin-container">
     <!-- Gestione Utenti -->
     <div class="admin-section">
@@ -57,5 +57,6 @@
         </a>
     </div>
 </div>
+</main>
 </body>
 </html>

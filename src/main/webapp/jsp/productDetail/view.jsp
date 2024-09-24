@@ -55,7 +55,7 @@
     </div>
 </nav>
 
-
+<main>
 <div class="container">
     <!-- Link per tornare alla pagina precedente -->
     <div class="back-link">
@@ -86,7 +86,7 @@
         </div>
         </div>
     </div>
-
+</main>
 <footer>
     <div class="footer-content">
         <div class="footer-left">

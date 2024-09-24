@@ -2,10 +2,7 @@
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.Product"%>
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="com.pisano.tennispadelstore.controller.Cart" %>
 
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -50,6 +47,7 @@
     </div>
 </nav>
 
+<main>
 <!-- Messaggio Applicativo -->
 <% if (applicationMessage != null) { %>
 <div class="alert">
@@ -150,7 +148,7 @@
         <% } %>
     </div>
 </div>
-
+</main>
 <!-- Script calcolo totale carrello -->
 <script>
     function calculateTotal() {

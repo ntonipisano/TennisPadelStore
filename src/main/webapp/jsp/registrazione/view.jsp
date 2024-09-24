@@ -1,6 +1,9 @@
 <%--PAGINA DI REGISTRAZIONE--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page session="false"%>
+<%
+    String applicationMessage = (String) request.getAttribute("applicationMessage");
+%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -18,6 +21,7 @@
         </a>
     </div>
 </nav>
+<main>
 
     <div class="container">
         <h1>Registrazione</h1>
@@ -42,9 +46,19 @@
             <div class="form-group">
                 <button type="submit">Registrati!</button>
             </div>
+            <% if (applicationMessage != null) { %>
+            <div style="color: #b20000;
+    background-color: #fdd;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;">
+                <%= applicationMessage %>
+            </div>
+            <% } %>
         </form>
     </div>
-
+</main>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("RegistrazioneForm");

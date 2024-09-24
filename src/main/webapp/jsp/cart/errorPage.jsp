@@ -52,8 +52,8 @@
     <%= applicationMessage %>
 </div>
 <% } %>
-
-<div class="container">
+<main>
+<!-- <div class="container"> -->
     <h1> C'e' stato un errore nell'elaborazione del tuo ordine </h1>
     <h2> I seguenti prodotti non sono presenti nel nostro magazzino o non abbiamo il numero di prodotti da te richiesto: </h2>
     <%
@@ -67,6 +67,7 @@
         }
     %>
     <h3>Ci scusiamo per l'inconveniente</h3>
-</div>
+<!-- </div> -->
+</main>
 </body>
 </html>

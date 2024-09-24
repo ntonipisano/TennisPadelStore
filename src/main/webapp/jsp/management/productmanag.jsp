@@ -95,6 +95,7 @@
     <button onclick="showAddProductForm()" style="padding: 5px 10px; margin-top: 10px; font-family:Anek Bangla,sans-serif; cursor:pointer">Aggiungi Prodotto</button>
 </div>
 
+<main>
 <!-- Form aggiunta prodotto -->
 <div id="add-product-form" style="display: none;">
     <form class="edit-form" action="Dispatcher" method="post" enctype="multipart/form-data">
@@ -258,5 +259,6 @@
         </tbody>
     </table>
 </div>
+</main>
 </body>
 </html>
