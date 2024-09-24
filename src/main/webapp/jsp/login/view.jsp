@@ -1,5 +1,4 @@
 <%-- LOGIN --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page session="false"%>
 <%@page import="com.pisano.tennispadelstore.model.mo.User"%>
 
@@ -7,8 +6,6 @@
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
-
 %>
 
 <!DOCTYPE html>

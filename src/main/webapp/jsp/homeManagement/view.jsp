@@ -10,8 +10,6 @@
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
-
 %>
 
 <!DOCTYPE html>
@@ -73,7 +71,7 @@
             byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
             base64Image = Base64.getEncoder().encodeToString(imageData);
             } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
             }
             }
         %>

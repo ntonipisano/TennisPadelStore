@@ -9,8 +9,6 @@
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
     Product product = (Product) request.getAttribute("product");
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
     String base64Image = null;
     if (product != null && product.getImage() != null) {
         try {
@@ -18,7 +16,7 @@
             byte[] imageData = imageBlob.getBytes(1, (int) imageBlob.length());
             base64Image = Base64.getEncoder().encodeToString(imageData);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 %>

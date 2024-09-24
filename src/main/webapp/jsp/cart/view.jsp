@@ -8,7 +8,6 @@
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
 %>
 
 <!DOCTYPE html>
@@ -107,7 +106,7 @@
     <div class="checkout-section">
         <% if (productsAndQuantity != null && !productsAndQuantity.isEmpty()) { %>
         <h2>Dati di Spedizione</h2>
-        <form action="Dispatcher" method="post" id="checkout-form" onsubmit="updateTotalPrice()">
+        <form action="Dispatcher" method="post" id="checkout-form">
             <input type="hidden" name="controllerAction" value="OrderController.createOrder"/>
 
 

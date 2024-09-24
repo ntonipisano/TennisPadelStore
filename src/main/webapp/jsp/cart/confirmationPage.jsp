@@ -6,7 +6,6 @@
     User loggedUser = (User) request.getAttribute("loggedUser");
     String orderid = (String) request.getAttribute("orderid");
     String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
 %>
 
 <!DOCTYPE html>

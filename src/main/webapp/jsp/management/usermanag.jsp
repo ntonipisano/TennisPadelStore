@@ -5,9 +5,6 @@
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
-    /*Ottengo dal controller la lista di tutti gli utenti*/
     List<User> allUsers = (List<User>) request.getAttribute("allUsers");
 %>
 

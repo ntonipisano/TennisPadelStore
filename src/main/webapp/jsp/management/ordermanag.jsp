@@ -6,8 +6,6 @@
 <%
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Home";
     List<Order> allOrders = (List<Order>) request.getAttribute("allOrders");
 %>
 
@@ -51,7 +49,7 @@
             <th class="prezzo-column" style="color: #be3636;">Data ordine</th>
             <th class="nome-column" style="color: #be3636;">Cellulare</th>
             <th class="nome-column" style="color: #be3636;">Indirizzo</th>
-            <th class="prezzo-column"style="color: #be3636;">CAP</th>
+            <th class="prezzo-column" style="color: #be3636;">CAP</th>
             <th class="prezzo-column" style="color: #be3636;">Provincia</th>
             <th class="nome-column" style="color: #be3636;">Citta'</th>
             <th class="prezzo-column" style="color: #be3636;">Metodo di pagamento</th>
