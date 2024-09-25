@@ -1,9 +1,7 @@
 package com.pisano.tennispadelstore.controller;
 
-import com.pisano.tennispadelstore.model.dao.DAOFactory;
-import com.pisano.tennispadelstore.model.dao.ProductDAO;
-import com.pisano.tennispadelstore.model.dao.UserDAO;
-import com.pisano.tennispadelstore.model.dao.OrderDAO;
+import com.pisano.tennispadelstore.model.dao.*;
+import com.pisano.tennispadelstore.model.mo.Adminkey;
 import com.pisano.tennispadelstore.model.mo.Product;
 import com.pisano.tennispadelstore.model.mo.User;
 import com.pisano.tennispadelstore.model.mo.Order;
@@ -17,7 +15,6 @@ import jakarta.servlet.http.Part;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Base64;
 import java.sql.Blob;
 import java.util.List;
 
@@ -667,6 +664,111 @@ public class Management {
         }
     }
 
+
+    public static void adminkeymanag(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory sessionDAOFactory = null;
+        DAOFactory adminkeyDAOFactory = null;
+        User loggedUser;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            /*Factory user*/
+            Map sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /*Factory Adminkey che va nel db */
+            Map adminkeyFactoryParameters = new HashMap<String, Object>();
+            adminkeyFactoryParameters.put("request", request);
+            adminkeyFactoryParameters.put("response", response);
+            adminkeyDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, adminkeyFactoryParameters);
+            adminkeyDAOFactory.beginTransaction();
+
+            AdminkeyDAO adminkeyDAO = adminkeyDAOFactory.getAdminkeyDAO();
+            String dbkey = adminkeyDAO.Checkkey();
+
+            request.setAttribute("loggedOn", loggedUser != null);
+            request.setAttribute("loggedUser", loggedUser);
+            request.setAttribute("viewUrl", "management/adminkeymanag");
+            request.setAttribute("dbkey", dbkey);
+
+            sessionDAOFactory.commitTransaction();
+            adminkeyDAOFactory.commitTransaction();
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
+                if (adminkeyDAOFactory != null) adminkeyDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
+                if (adminkeyDAOFactory != null) adminkeyDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+            }
+        }
+    }
+
+    public static void editAdminkey(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory adminkeyDAOFactory = null;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            Map adminkeyFactoryParameters = new HashMap<String, Object>();
+            adminkeyFactoryParameters.put("request", request);
+            adminkeyFactoryParameters.put("response", response);
+            adminkeyDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, adminkeyFactoryParameters);
+            adminkeyDAOFactory.beginTransaction();
+
+            //Ricevo i parametri dalla request
+            String newkey = request.getParameter("newkey");
+            AdminkeyDAO adminkeyDAO = adminkeyDAOFactory.getAdminkeyDAO();
+
+            //Creo oggetto di tipo Adminkey da passare alla update
+            Adminkey newadminkey = new Adminkey();
+            newadminkey.setKey(newkey);
+
+            adminkeyDAO.update(newadminkey);
+
+            adminkeyDAOFactory.commitTransaction();
+
+            Management.adminkeymanag(request, response);
+            request.setAttribute("viewUrl","management/adminkeymanag");
+
+            /*Includo nella risposta uno script per ricaricare la pagina e quindi vedere subito l'aggiornamento*/
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<script type='text/javascript'>");
+            out.println("window.location.href = 'Dispatcher?controllerAction=Management.adminkeymanag';");
+            out.println("</script>");
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (adminkeyDAOFactory != null) adminkeyDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Rollback Error", t);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (adminkeyDAOFactory != null) adminkeyDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Close Transaction Error", t);
+            }
+        }
+    }
 
 
     }

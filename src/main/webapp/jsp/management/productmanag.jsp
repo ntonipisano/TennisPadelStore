@@ -229,7 +229,7 @@
                         <tr>
                             <td>Vetrina</td>
                             <td>
-                                <!-- <input type="checkbox" name="vetrina" <%= product.getVetrina() ? "checked" : "" %>> -->
+                                <%= product.getVetrina() ? "checked" : "" %>
                                 <select name="vetrina" id="vetrina">
                                     <option value="S" <%= product.getVetrina() ? "selected" : "" %>>Si</option>
                                     <option value="N" <%= !product.getVetrina() ? "selected" : "" %>>No</option>

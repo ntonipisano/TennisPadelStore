@@ -18,7 +18,7 @@ public class AdminkeyDAOMySQLJDBCImpl implements AdminkeyDAO {
 
         PreparedStatement ps;
         try {
-            String sql = "INSERT INTO adminkey (key) VALUES (?)";
+            String sql = "INSERT INTO adminkey (`key`) VALUES (?)";
             ps = conn.prepareStatement(sql);
             ps.setString(1, adminkey.getKey());
 
@@ -34,7 +34,7 @@ public class AdminkeyDAOMySQLJDBCImpl implements AdminkeyDAO {
     public void update (Adminkey adminkey) {
         PreparedStatement ps;
         try {
-            String sql = "UPDATE adminkey SET key = ?";
+            String sql = "UPDATE adminkey SET `key` = ?";
             ps = conn.prepareStatement(sql);
             ps.setString(1, adminkey.getKey());
             ps.executeUpdate();

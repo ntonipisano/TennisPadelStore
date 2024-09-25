@@ -32,7 +32,7 @@
         <% } %>
     </div>
 </nav>
-<main>
+
 <div class="admin-container">
     <!-- Gestione Utenti -->
     <div class="admin-section">
@@ -54,7 +54,15 @@
         <h2><button class="start-button">Gestione Ordini</button></h2>
         </a>
     </div>
+
+    <!-- Modifica chiave amministratore -->
+    <div class="admin-section">
+        <a href="Dispatcher?controllerAction=Management.adminkeymanag">
+            <h2><button class="start-button">Modifica chiave admin</button></h2>
+        </a>
+    </div>
+
 </div>
-</main>
+
 </body>
 </html>

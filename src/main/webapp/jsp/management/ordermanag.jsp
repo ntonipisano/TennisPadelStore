@@ -42,18 +42,18 @@
     <table class="table-wide">
         <thead>
         <tr>
-            <th class="prezzo-column" style="color: #be3636;">Userid cliente</th>
-            <th class="nome-column" style="color: #be3636;">Nome e cognome</th>
-            <th class="prezzo-column" style="color: #be3636;">Costo</th>
-            <th class="nome-column" style="color: #be3636;">Stato</th>
-            <th class="prezzo-column" style="color: #be3636;">Data ordine</th>
-            <th class="nome-column" style="color: #be3636;">Cellulare</th>
-            <th class="nome-column" style="color: #be3636;">Indirizzo</th>
-            <th class="prezzo-column" style="color: #be3636;">CAP</th>
-            <th class="prezzo-column" style="color: #be3636;">Provincia</th>
-            <th class="nome-column" style="color: #be3636;">Citta'</th>
-            <th class="prezzo-column" style="color: #be3636;">Metodo di pagamento</th>
-            <th class="actions-column" style="color: #be3636;">Modifica stato ordine </th>
+            <th class="prezzo-column">Userid cliente</th>
+            <th class="nome-column">Nome e cognome</th>
+            <th class="prezzo-column">Costo</th>
+            <th class="nome-column">Stato</th>
+            <th class="prezzo-column">Data ordine</th>
+            <th class="nome-column">Cellulare</th>
+            <th class="nome-column">Indirizzo</th>
+            <th class="prezzo-column">CAP</th>
+            <th class="prezzo-column">Provincia</th>
+            <th class="nome-column">Citta'</th>
+            <th class="prezzo-column">Metodo di pagamento</th>
+            <th class="actions-column">Modifica stato ordine </th>
         </tr>
         </thead>
         <tbody>

@@ -3,7 +3,6 @@ package com.pisano.tennispadelstore.controller;
 import com.pisano.tennispadelstore.model.dao.*;
 import com.pisano.tennispadelstore.model.mo.User;
 import com.pisano.tennispadelstore.model.mo.Product;
-import com.pisano.tennispadelstore.model.mo.Order;
 import com.pisano.tennispadelstore.services.config.Configuration;
 import com.pisano.tennispadelstore.services.logservice.LogService;
 import jakarta.servlet.http.HttpServletRequest;
