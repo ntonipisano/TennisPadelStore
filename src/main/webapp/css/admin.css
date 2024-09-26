@@ -124,21 +124,6 @@ body {
     text-align: center;
 }
 
-.table-wide .cognome-column {
-    width: 150px;
-    text-align: center;
-}
-
-.table-wide .username-column {
-    width: 150px;
-    text-align: center;
-}
-
-.table-wide .admin-column {
-    width: 150px;
-    text-align: center;
-}
-
 .table-wide .prezzo-column {
     width: 50px;
     text-align: center;

@@ -38,6 +38,7 @@
         <a href="Dispatcher?controllerAction=Login.view" class="buttons">Login</a>
         <% } else { %>
         <span>Benvenuto/a, <%= loggedUser.getNome() %>!</span>
+        <a href="Dispatcher?controllerAction=OrderController.OrdersForUser" class="buttons">I tuoi ordini</a>
         <a href="Dispatcher?controllerAction=Login.logout" class="buttons">Logout</a>
         <% } %>
         <a href="Dispatcher?controllerAction=Cart.view" class="buttons"><img src="${pageContext.request.contextPath}/images/carrello.png">

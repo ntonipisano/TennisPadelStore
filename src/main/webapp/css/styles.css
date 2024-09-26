@@ -338,11 +338,24 @@ footer {
     background-color: #218838;
 }
 
-/* Stili per la navbar dei filtri */
 .filter-navbar {
     display: flex;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0rem;
+}
+
+.table-wide th, .table-wide td {
+    padding: 10px;
+}
+
+.table-wide .nome-column {
+    width: 150px;
+    text-align: center;
+}
+
+.table-wide .prezzo-column {
+    width: 50px;
+    text-align: center;
 }

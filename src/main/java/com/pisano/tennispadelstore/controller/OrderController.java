@@ -86,8 +86,6 @@ public class OrderController {
                 }
             }
 
-
-
             // Controlla disponibilità dei prodotti
             for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
                 Long productId = entry.getKey();
@@ -172,5 +170,62 @@ public class OrderController {
             }
         }
     }
+
+
+    public static void OrdersForUser(HttpServletRequest request, HttpServletResponse response) {
+        DAOFactory sessionDAOFactory = null;
+        DAOFactory orderDAOFactory = null;
+        User loggedUser;
+        Logger logger = LogService.getApplicationLogger();
+
+        try {
+            /*Factory user*/
+            Map sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /*Factory Order che va nel db */
+            Map orderFactoryParameters = new HashMap<String, Object>();
+            orderFactoryParameters.put("request", request);
+            orderFactoryParameters.put("response", response);
+            orderDAOFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, orderFactoryParameters);
+            orderDAOFactory.beginTransaction();
+
+            OrderDAO orderDAO = orderDAOFactory.getOrderDAO();
+            Long userid = loggedUser.getUserId();
+            List<Order> UserOrders = orderDAO.findByUserid(userid);
+
+            request.setAttribute("loggedOn", loggedUser != null);
+            request.setAttribute("loggedUser", loggedUser);
+            request.setAttribute("viewUrl", "login/myorders");
+            request.setAttribute("UserOrders", UserOrders);
+
+            sessionDAOFactory.commitTransaction();
+            orderDAOFactory.commitTransaction();
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Controller Error", e);
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
+                if (orderDAOFactory != null) orderDAOFactory.rollbackTransaction();
+            } catch (Throwable t) {
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
+                if (orderDAOFactory != null) orderDAOFactory.closeTransaction();
+            } catch (Throwable t) {
+            }
+        }
+    }
+
+
 
 }
