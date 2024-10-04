@@ -153,6 +153,7 @@
 <script>
     function calculateTotal() {
         let total = 0;
+        //Per ogni elemento del carrello estraggo il prezzo e la quantità
         const rows = document.querySelectorAll('.cart-section table tr');
 
         rows.forEach((row) => {
@@ -170,9 +171,11 @@
             }
         });
         document.getElementById('total-price').textContent = total.toFixed(2);
+        //Setto il campo nascosto da inviare al server
         const totalPriceInput = document.getElementById('totalPrice');
         totalPriceInput.value = total.toFixed(2);
     }
+    //La funzione viene eseguita auto quando la pag viene caricata
     window.onload = calculateTotal;
 
     </script>

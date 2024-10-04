@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/cart/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/cart" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/homeManagement/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/homeManagement" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/login/myorders.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/login" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/login/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/login" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/management/adminkeymanag.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/management/ordermanag.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/management/productmanag.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/management/usermanag.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/management/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/productDetail/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/productDetail" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/jsp/shop/view.jsp" value="file://$PROJECT_DIR$/src/main/webapp/jsp/shop" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/productResults.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+      </map>
+    </option>
+  </component>
+</project>

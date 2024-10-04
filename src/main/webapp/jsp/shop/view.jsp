@@ -39,7 +39,7 @@
 
     // Funzione per ricaricare la pagina
     function handlePageReload() {
-        // Se la pagina non è mai stata ricaricata, ricarica la prima volta
+        // Se la pagina non è mai stata ricaricata, ricarica la prima volta. Utilizzo localStorage
         if (!localStorage.getItem("firstLoad")) {
             localStorage.setItem("firstLoad", "true");
             window.location.reload();
@@ -145,7 +145,7 @@
         const productResults = document.getElementById('searchResults');
 
         searchForm.addEventListener('submit', function() {
-            // Mostra il div dei risultati solo dopo che il form è stato inviato
+            // Mostra il div dei risultati solo dopo che il form è stato inviato, cambiando lo stile CSS da none a block
             productResults.style.display = 'block';
         });
     });
@@ -239,13 +239,14 @@
                     product.style.display = 'none';
                 }
             });
+            //Se non ci sono prodotti che corrispondono ai filtri mostro il messaggio noProductsMessage, altrimenti non lo mostro
             if (visibleCount === 0) {
                 noProductsMessage.style.display = 'block';
             } else {
                 noProductsMessage.style.display = 'none';
             }
         }
-        //Event listener per il form di filtraggio
+        //Event listener per il form di filtraggio: Ogni volta che un valore nel form di filtraggio viene modificato la filterProducts() viene eseguita aggiornando in tempo reale i prodotti
         filterForm.addEventListener('change', filterProducts);
         document.getElementById('resetFilters').addEventListener('click', function() {
             filterForm.reset();

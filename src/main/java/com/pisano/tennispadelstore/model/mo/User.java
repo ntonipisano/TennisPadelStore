@@ -8,7 +8,6 @@ public class User {
     private String cognome;
     private boolean admin;
     private boolean deleted;
-
     private Order[] orders;
 
     public Long getUserId() {
